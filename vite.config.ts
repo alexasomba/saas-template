@@ -1,6 +1,9 @@
 import { defineConfig } from "vite-plus";
 
 export default defineConfig({
+  staged: {
+    "*.{js,ts,tsx,vue,svelte}": "vp check --fix",
+  },
   fmt: {
     ignorePatterns: [],
   },

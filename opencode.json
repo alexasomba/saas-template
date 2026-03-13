@@ -32,6 +32,12 @@
       "type": "remote",
       "url": "https://mcp.expo.dev/mcp",
       "enabled": true
+    },
+    "vite-plus": {
+      "type": "local",
+      "command": ["npx", "vp", "mcp"],
+      "enabled": true,
+      "environment": {}
     }
   }
 }

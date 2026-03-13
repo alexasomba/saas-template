@@ -1,7 +1,0 @@
-# Lefthook configuration
-# https://github.com/evilmartians/lefthook
-
-pre-commit:
-  jobs:
-    - name: vite-plus
-      run: pnpm vp staged
