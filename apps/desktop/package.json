@@ -3,21 +3,21 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "start": "turbo -F web build && electrobun dev",
-    "dev": "electrobun dev --watch",
-    "dev:hmr": "concurrently \"bun run hmr\" \"bun run start\"",
-    "hmr": "turbo -F web dev",
-    "build": "turbo -F web build && electrobun build",
-    "build:stable": "turbo -F web build && electrobun build --env=stable",
-    "build:canary": "turbo -F web build && electrobun build --env=canary",
-    "check-types": "tsc --noEmit"
+    "start": "vp run web#build && vpx electrobun dev",
+    "dev": "vpx electrobun dev --watch",
+    "dev:hmr": "concurrently \"vp run hmr\" \"vp run start\"",
+    "hmr": "vp run --filter web dev",
+    "build": "vp run web#build && vpx electrobun build",
+    "build:stable": "vp run web#build && vpx electrobun build --env=stable",
+    "build:canary": "vp run web#build && vpx electrobun build --env=canary",
+    "check-types": "vpx tsc --noEmit"
   },
   "dependencies": {
     "electrobun": "^1.15.1"
   },
   "devDependencies": {
-    "@types/bun": "^1.3.4",
-    "concurrently": "^9.1.0",
+    "@types/bun": "^1.3.10",
+    "concurrently": "^9.2.1",
     "typescript": "^5"
   }
 }

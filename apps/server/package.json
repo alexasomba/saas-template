@@ -3,13 +3,13 @@
   "type": "module",
   "main": "src/index.ts",
   "scripts": {
-    "build": "tsdown",
+    "build": "vp build",
     "check-types": "tsc -b",
     "compile": "bun build --compile --minify --sourcemap --bytecode ./src/index.ts --outfile server"
   },
   "dependencies": {
-    "@ai-sdk/devtools": "^0.0.2",
-    "@ai-sdk/google": "^3.0.1",
+    "@ai-sdk/devtools": "^0.0.15",
+    "@ai-sdk/google": "^3.0.51",
     "@my-better-t-app/api": "workspace:*",
     "@my-better-t-app/auth": "workspace:*",
     "@my-better-t-app/db": "workspace:*",
@@ -26,10 +26,10 @@
   "devDependencies": {
     "@cloudflare/workers-types": "catalog:",
     "@my-better-t-app/config": "workspace:*",
-    "@types/node": "^22.13.14",
+    "@types/node": "^22.19.15",
     "alchemy": "catalog:",
-    "tsdown": "^0.16.5",
-    "typescript": "^5",
+    "tsdown": "^0.21.2",
+    "typescript": "^5.9.3",
     "wrangler": "catalog:"
   }
 }

@@ -19,7 +19,7 @@
   "backend": "hono",
   "runtime": "workers",
   "frontend": ["tanstack-start", "native-uniwind"],
-  "addons": ["electrobun", "lefthook", "mcp", "oxlint", "skills", "starlight", "turborepo", "wxt"],
+  "addons": ["electrobun", "lefthook", "mcp", "oxlint", "skills", "starlight", "wxt"],
   "examples": ["ai"],
   "auth": "better-auth",
   "payments": "none",
@@ -27,5 +27,5 @@
   "dbSetup": "d1",
   "api": "orpc",
   "webDeploy": "cloudflare",
-  "serverDeploy": "cloudflare",
+  "serverDeploy": "cloudflare"
 }
