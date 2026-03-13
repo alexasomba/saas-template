@@ -3,6 +3,8 @@ import { defineConfig } from "vite-plus";
 export default defineConfig({
   staged: {
     "*.{js,ts,tsx,vue,svelte}": "vp check --fix",
+    "*.{json,md,css}": "vp fmt",
+    "package.json": "vp pm dedupe --check",
   },
   fmt: {
     ignorePatterns: [],
