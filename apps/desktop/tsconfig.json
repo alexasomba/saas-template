@@ -5,8 +5,8 @@
     "target": "ES2022",
     "noEmit": true,
     "paths": {
-      "@/*": ["./src/*"],
-    },
+      "@/*": ["./src/*"]
+    }
   },
-  "include": ["src/**/*.ts", "electrobun.config.ts"],
+  "include": ["src/**/*.ts", "electrobun.config.ts"]
 }
