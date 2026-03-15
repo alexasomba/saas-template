@@ -118,7 +118,7 @@ importers:
         specifier: workspace:*
         version: link:packages/config
       typescript:
-        specifier: ^6.0.1-rc
+        specifier: 6.0.1-rc
         version: 6.0.1-rc
       vite-plus:
         specifier: 'catalog:'
