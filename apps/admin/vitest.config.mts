@@ -29,6 +29,7 @@ export default defineWorkersConfig({
   plugins: [tsconfigPaths(), react()],
   test: {
     environment: "node",
+    globals: true,
     setupFiles: ["./vitest.setup.ts"],
     include: ["tests/int/**/*.int.spec.ts"],
     pool: "@cloudflare/vitest-pool-workers",
