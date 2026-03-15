@@ -1,0 +1,79 @@
+/**
+ * For more details on how to configure Wrangler, refer to:
+ * https://developers.cloudflare.com/workers/wrangler/configuration/
+ */
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "saas-template-server",
+  "main": "./src/index.ts",
+  "compatibility_date": "2026-02-15",
+  "compatibility_flags": ["nodejs_compat"],
+  "dev": {
+    "port": 8787,
+    "inspector_port": 9287, // Must be unique to avoid debug conflicts
+  },
+  "vars": {
+    "ALLOWED_ORIGINS": "http://localhost:8788,http://localhost:8789",
+    "BETTER_AUTH_SECRET": "kswVps3uNOYy3SpViXjvRQO0bevTCpJpbVZarq0cvJe0tJBjCHcdecnEB+Y=", // add with wrangler secrets
+    "BETTER_AUTH_BASE_URL": "http://localhost:8789",
+    "TURNSTILE_SECRET_KEY": "placeholder_turnstile_secret",
+  },
+  "observability": {
+    "enabled": true,
+  },
+  "durable_objects": {
+    "bindings": [
+      {
+        "name": "EXAMPLE_DO",
+        "class_name": "ExampleDurableObject",
+      },
+    ],
+  },
+  "migrations": [
+    {
+      "tag": "v1",
+      "new_sqlite_classes": ["ExampleDurableObject"],
+    },
+  ],
+  "workflows": [
+    {
+      "name": "example-workflow",
+      "binding": "EXAMPLE_WORKFLOW",
+      "class_name": "ExampleWorkflow",
+    },
+  ],
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "saas-kit-db",
+      "database_id": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
+      "migrations_dir": "", // Use drizzle-kit to create migrations
+      "remote": false,
+    },
+  ],
+  "services": [
+    {
+      "binding": "NOTIFICATIONS_SERVICE",
+      "service": "saas-kit-notifications-service",
+    },
+  ],
+  "r2_buckets": [
+    {
+      "binding": "UPLOADS_BUCKET",
+      "bucket_name": "saas-kit-uploads",
+      "preview_bucket_name": "saas-kit-uploads-preview",
+    },
+  ],
+  "analytics_engine_datasets": [
+    {
+      "binding": "ANALYTICS",
+      "dataset": "saas_tracking",
+    },
+  ],
+  "kv_namespaces": [
+    {
+      "binding": "SYSTEM_SETTINGS",
+      "id": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
+    },
+  ],
+}

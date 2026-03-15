@@ -102,7 +102,7 @@ function TalkDetailPage() {
         </div>
 
         {/* Description content */}
-        <div className="prose prose-lg max-w-none dark:prose-invert prose-headings:text-foreground prose-headings:font-display prose-p:text-foreground prose-strong:text-foreground prose-a:text-secondary prose-li:text-foreground prose-ul:text-foreground font-body text-lg leading-relaxed pb-20">
+        <div className="prose prose-lg max-w-none dark:prose-invert font-body text-lg leading-relaxed text-foreground pb-20">
           <div dangerouslySetInnerHTML={{ __html: marked(talk.content) }} />
         </div>
       </div>

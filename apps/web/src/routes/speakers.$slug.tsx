@@ -99,7 +99,7 @@ function SpeakerDetailPage() {
 
       {/* Bio section */}
       <div className="max-w-4xl mx-auto px-6 py-12">
-        <div className="prose prose-lg max-w-none dark:prose-invert prose-headings:text-foreground prose-headings:font-display prose-p:text-foreground prose-strong:text-foreground prose-a:text-secondary font-body text-lg leading-relaxed">
+        <div className="prose prose-lg max-w-none dark:prose-invert font-body text-lg leading-relaxed text-foreground">
           <div dangerouslySetInnerHTML={{ __html: marked(speaker.content) }} />
         </div>
       </div>

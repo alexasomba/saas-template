@@ -1,7 +1,61 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "tanstack-start-app",
-  "compatibility_date": "2025-09-02",
+  "name": "saas-template-web",
+  "compatibility_date": "2026-02-12",
   "compatibility_flags": ["nodejs_compat"],
-  "main": "@tanstack/react-start/server-entry",
+  "main": "./src/server.ts",
+  "dev": {
+    "port": 8788,
+    "inspector_port": 9288, // Must be unique to avoid debug conflicts
+  },
+  "vars": {
+    "MY_VAR": "Hello from Cloudflare",
+    //"BETTER_AUTH_SECRET": "", // Add this via wrangler secrets put BETTER_AUTH_SECRET or on the Workers Dashboard
+    //"BETTER_AUTH_BASE_URL": "", // Add this via wrangler secrets put BETTER_AUTH_BASE_URL or on the Workers Dashboard
+    "GOOGLE_CLIENT_ID": "934022579398-lhc60nmqrev46a7u039pe5hgs98j2oj0.apps.googleusercontent.com",
+    "VITE_APP_NAME": "SaaS Kit",
+    "VITE_GITHUB_URL": "https://github.com/backpine/saas-kit",
+    "VITE_X_URL": "https://x.com/backpinelabs",
+    "VITE_INSTAGRAM_URL": "https://instagram.com/backpinelabs",
+    "VITE_CONTACT_PHONE": "+1234567890",
+    "VITE_WHATSAPP_NUMBER": "+1234567890",
+    "VITE_CONTACT_EMAIL": "hi@saaskit.com",
+    "VITE_APP_DESCRIPTION": "The ultimate full-stack SaaS starter kit for modern web development.",
+    //"GOOGLE_CLIENT_SECRET": "", // Add this via wrangler secrets put GOOGLE_CLIENT_SECRET or on the Workers Dashboard
+    //"POLAR_SECRET": "" // Add this via wrangler secrets put POLAR_SECRET or on the Workers Dashboard
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "saas-kit-db",
+      "database_id": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
+      "remote": false,
+      "migrations_dir": "", // Use drizzle-kit to create migrations
+    },
+  ],
+  "services": [
+    {
+      "binding": "DATA_SERVICE",
+      "service": "saas-kit-data-service",
+    },
+    {
+      "binding": "NOTIFICATIONS_SERVICE",
+      "service": "saas-kit-notifications-service",
+    },
+  ],
+  // "ai": {
+  //    "binding": "AI"
+  //  },
+  "analytics_engine_datasets": [
+    {
+      "binding": "ANALYTICS",
+      "dataset": "saas_tracking",
+    },
+  ],
+  "kv_namespaces": [
+    {
+      "binding": "SYSTEM_SETTINGS",
+      "id": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
+    },
+  ],
 }

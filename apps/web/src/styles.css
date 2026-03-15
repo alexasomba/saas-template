@@ -2,6 +2,7 @@
 @import "tailwindcss";
 
 @plugin "tailwindcss-animate";
+@plugin "@tailwindcss/typography";
 
 @custom-variant dark (&:is(.dark *));
 
@@ -182,6 +183,16 @@ code {
   --color-cream-dark: oklch(0.85 0.03 80);
   --color-charcoal: oklch(0.13 0.01 60);
   --color-charcoal-light: oklch(0.2 0.015 55);
+
+  /* Force typography to use our theme colors */
+  --color-prose-body: var(--foreground);
+  --color-prose-headings: var(--foreground);
+  --color-prose-links: var(--secondary);
+  --color-prose-bold: var(--foreground);
+  --color-prose-bullets: var(--primary);
+  --color-prose-quotes: var(--foreground);
+  --color-prose-hr: var(--border);
+  --color-prose-th-borders: var(--border);
 }
 
 @layer base {
@@ -190,6 +201,17 @@ code {
   }
   body {
     @apply bg-background text-foreground;
+  }
+  /* Bruteforce contrast fix for typography in light mode */
+  .prose {
+    color: var(--foreground) !important;
+  }
+  .prose :where(p, li, strong, em, h1, h2, h3, h4, h5, h6, blockquote) {
+    color: var(--foreground) !important;
+  }
+  /* Ensure Headings are definitely dark in light mode */
+  :root .prose :where(h1, h2, h3, h4) {
+    color: oklch(0.13 0.01 60) !important;
   }
 }
 
