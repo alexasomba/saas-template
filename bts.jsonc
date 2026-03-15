@@ -19,7 +19,7 @@
   "backend": "hono",
   "runtime": "workers",
   "frontend": ["tanstack-start", "native-uniwind"],
-  "addons": ["electrobun", "lefthook", "mcp", "oxlint", "skills", "starlight", "wxt"],
+  "addons": ["electrobun", "mcp", "oxlint", "skills", "starlight", "wxt"],
   "examples": ["ai"],
   "auth": "better-auth",
   "payments": "none",

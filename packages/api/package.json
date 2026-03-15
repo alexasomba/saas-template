@@ -1,5 +1,5 @@
 {
-  "name": "@my-better-t-app/api",
+  "name": "@workspace/api",
   "type": "module",
   "exports": {
     ".": {
@@ -11,18 +11,18 @@
   },
   "scripts": {},
   "dependencies": {
-    "@my-better-t-app/auth": "workspace:*",
-    "@my-better-t-app/db": "workspace:*",
-    "@my-better-t-app/env": "workspace:*",
     "@orpc/client": "catalog:",
     "@orpc/openapi": "catalog:",
     "@orpc/server": "catalog:",
     "@orpc/zod": "catalog:",
+    "@workspace/auth": "workspace:*",
+    "@workspace/db": "workspace:*",
+    "@workspace/env": "workspace:*",
     "dotenv": "catalog:",
     "zod": "catalog:"
   },
   "devDependencies": {
-    "@my-better-t-app/config": "workspace:*",
+    "@workspace/config": "workspace:*",
     "hono": "catalog:",
     "typescript": "catalog:"
   }

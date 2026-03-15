@@ -9,7 +9,7 @@
     "noEmit": true,
     "paths": {
       "@/*": ["./src/*"],
-      "@my-better-t-app/ui/*": ["../../packages/ui/src/*"],
-    },
-  },
+      "@workspace/ui/*": ["../../packages/ui/src/*"]
+    }
+  }
 }

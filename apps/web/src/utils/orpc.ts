@@ -1,5 +1,5 @@
-import type { AppRouter } from "@my-better-t-app/api/routers/index";
-import { env } from "@my-better-t-app/env/web";
+import type { AppRouter } from "@workspace/api/routers/index";
+import { env } from "@workspace/env/web";
 import { createORPCClient } from "@orpc/client";
 import { RPCLink } from "@orpc/client/fetch";
 import type { RouterClient } from "@orpc/server";

@@ -2,9 +2,9 @@ import { defineConfig } from "vite-plus";
 
 export default defineConfig({
   staged: {
-    "*.{js,ts,tsx,vue,svelte}": "vp check --fix",
+    "*.{js,ts,tsx,vue,svelte}": ["vp check --fix", "vp test related"],
     "*.{json,md,css}": "vp fmt",
-    "package.json": "vp pm dedupe --check",
+    "package.json": "vp dedupe --check",
   },
   fmt: {
     ignorePatterns: [],
@@ -53,7 +53,7 @@ export default defineConfig({
   run: {
     tasks: {
       build: {
-        command: "vp run build --filter !my-better-t-app",
+        command: "vp run build --filter !saas-template",
         dependsOn: ["lint"],
       },
       lint: {
@@ -63,26 +63,26 @@ export default defineConfig({
         command: "vp check-types",
       },
       test: {
-        command: "vp run test --filter !my-better-t-app",
+        command: "vp run test --filter !saas-template",
       },
       dev: {
-        command: "vp run dev --filter !my-better-t-app",
+        command: "vp run dev --filter !saas-template",
         cache: false,
       },
       "db:push": {
-        command: "vp run @my-better-t-app/db#db:push",
+        command: "vp run @workspace/db#db:push",
         cache: false,
       },
       "db:generate": {
-        command: "vp run @my-better-t-app/db#db:generate",
+        command: "vp run @workspace/db#db:generate",
         cache: false,
       },
       deploy: {
-        command: "vp run @my-better-t-app/infra#deploy",
+        command: "vp run @workspace/infra#deploy",
         cache: false,
       },
       destroy: {
-        command: "vp run @my-better-t-app/infra#destroy",
+        command: "vp run @workspace/infra#destroy",
         cache: false,
       },
     },

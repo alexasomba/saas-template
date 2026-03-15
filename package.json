@@ -1,5 +1,5 @@
 {
-  "name": "my-better-t-app",
+  "name": "saas-template",
   "private": true,
   "type": "module",
   "scripts": {
@@ -14,16 +14,19 @@
     "check": "vp check --fix"
   },
   "dependencies": {
-    "@my-better-t-app/env": "workspace:*",
+    "@workspace/env": "workspace:*",
     "dotenv": "catalog:",
     "zod": "catalog:"
   },
   "devDependencies": {
     "@cloudflare/workers-types": "catalog:",
-    "@my-better-t-app/config": "workspace:*",
     "@types/node": "^22.19.15",
+    "@workspace/config": "workspace:*",
     "typescript": "6.0.1-rc",
     "vite-plus": "catalog:"
+  },
+  "engines": {
+    "node": ">=24"
   },
   "packageManager": "pnpm@10.32.1"
 }

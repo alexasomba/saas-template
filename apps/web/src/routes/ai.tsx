@@ -1,7 +1,7 @@
 import { useChat } from "@ai-sdk/react";
-import { env } from "@my-better-t-app/env/web";
-import { Button } from "@my-better-t-app/ui/components/button";
-import { Input } from "@my-better-t-app/ui/components/input";
+import { env } from "@workspace/env/web";
+import { Button } from "@workspace/ui/components/button";
+import { Input } from "@workspace/ui/components/input";
 import { createFileRoute } from "@tanstack/react-router";
 import { DefaultChatTransport } from "ai";
 import { Send } from "lucide-react";

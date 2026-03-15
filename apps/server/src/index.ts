@@ -1,9 +1,9 @@
 import { devToolsMiddleware } from "@ai-sdk/devtools";
 import { createGoogleGenerativeAI } from "@ai-sdk/google";
-import { createContext } from "@my-better-t-app/api/context";
-import { appRouter } from "@my-better-t-app/api/routers/index";
-import { auth } from "@my-better-t-app/auth";
-import { env } from "@my-better-t-app/env/server";
+import { createContext } from "@workspace/api/context";
+import { appRouter } from "@workspace/api/routers/index";
+import { auth } from "@workspace/auth";
+import { env } from "@workspace/env/server";
 import { OpenAPIHandler } from "@orpc/openapi/fetch";
 import { OpenAPIReferencePlugin } from "@orpc/openapi/plugins";
 import { onError } from "@orpc/server";

@@ -1,5 +1,5 @@
 {
-  "name": "@my-better-t-app/env",
+  "name": "@workspace/env",
   "version": "0.0.0",
   "private": true,
   "type": "module",
@@ -14,9 +14,9 @@
     "zod": "catalog:"
   },
   "devDependencies": {
-    "@my-better-t-app/config": "workspace:*",
-    "@my-better-t-app/infra": "workspace:*",
     "@types/node": "catalog:",
+    "@workspace/config": "workspace:*",
+    "@workspace/infra": "workspace:*",
     "typescript": "catalog:"
   }
 }

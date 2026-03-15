@@ -74,3 +74,29 @@ These commands map to their corresponding tools. For example, `vp dev --port 300
 - [ ] Run `vp install` after pulling remote changes and before getting started.
 - [ ] Run `vp check` and `vp test` to validate changes.
 <!--VITE PLUS END-->
+
+<!-- intent-skills:start -->
+
+# Skill mappings - when working in these areas, load the linked skill file into context.
+
+skills:
+
+- task: "working on authentication, sessions, or security"
+  load: ".agents/skills/better-auth-best-practices/SKILL.md"
+- task: "developing backend APIs, Workers, or Hono routes"
+  load: [".agents/skills/workers-best-practices/SKILL.md", ".agents/skills/hono/SKILL.md"]
+- task: "building mobile UI screens, Expo features, or native UI"
+  load: ".agents/skills/building-native-ui/SKILL.md"
+- task: "managing Cloudflare infrastructure or database schemas"
+  load: ".agents/skills/wrangler/SKILL.md"
+- task: "building AI agents or stateful workers using Cloudflare Agents SDK"
+  load: [".agents/skills/building-ai-agent-on-cloudflare/SKILL.md", ".agents/skills/agents-sdk/SKILL.md"]
+- task: "handling stateful coordination, WebSockets, or Durable Objects"
+  load: ".agents/skills/durable-objects/SKILL.md"
+- task: "managing background tasks, queues, or workflows on Cloudflare"
+  load: [".agents/skills/cloudflare/references/queues", ".agents/skills/cloudflare/references/workflows"]
+- task: "managing the Vite+ development toolchain, vp commands, or build configurations"
+  load: ".agents/skills/vite-plus/SKILL.md"
+- task: "optimizing React performance, TanStack Start features, or frontend best practices"
+load: ".agents/skills/vercel-react-best-practices/SKILL.md"
+<!-- intent-skills:end -->
