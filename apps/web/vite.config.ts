@@ -8,10 +8,12 @@ import { tanstackStart } from "@tanstack/react-start/plugin/vite";
 import viteReact from "@vitejs/plugin-react";
 import alchemy from "alchemy/cloudflare/tanstack-start";
 import { defineConfig } from "vite-plus";
-import { cloudflare } from "@cloudflare/vite-plugin";
 import contentCollections from "@content-collections/vite";
 
 const config = defineConfig({
+  resolve: {
+    tsconfigPaths: true,
+  },
   plugins: [
     devtools(),
     paraglideVitePlugin({
@@ -19,9 +21,7 @@ const config = defineConfig({
       outdir: "./src/paraglide",
       strategy: ["url", "baseLocale"],
     }),
-    cloudflare({ viteEnvironment: { name: "ssr" } }),
     contentCollections(),
-
     tailwindcss(),
     tanstackStart(),
     viteReact(),

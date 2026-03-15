@@ -73,3 +73,6 @@ __unconfig*
 todos.json
 mcp-todos.json
 
+
+# Content Collections
+.content-collections
