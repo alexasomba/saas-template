@@ -53,7 +53,7 @@ export default defineConfig({
   run: {
     tasks: {
       build: {
-        command: "vp build",
+        command: "vp run build --filter !my-better-t-app",
         dependsOn: ["lint"],
       },
       lint: {
@@ -62,8 +62,11 @@ export default defineConfig({
       "check-types": {
         command: "vp check-types",
       },
+      test: {
+        command: "vp run test --filter !my-better-t-app",
+      },
       dev: {
-        command: "vp dev",
+        command: "vp run dev --filter !my-better-t-app",
         cache: false,
       },
       "db:push": {

@@ -3,8 +3,8 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "vp run -r dev",
-    "build": "vp run -r build",
+    "run:dev": "vp run -r dev",
+    "run:build": "vp run -r build",
     "dev:native": "vp run --filter native dev",
     "dev:web": "vp run --filter web dev",
     "dev:desktop": "vp run --filter desktop dev:hmr",
@@ -22,7 +22,7 @@
     "@cloudflare/workers-types": "catalog:",
     "@my-better-t-app/config": "workspace:*",
     "@types/node": "^22.19.15",
-    "typescript": "^5.9.3",
+    "typescript": "6.0.1-rc",
     "vite-plus": "catalog:"
   },
   "packageManager": "pnpm@10.32.1"

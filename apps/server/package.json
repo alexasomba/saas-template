@@ -3,8 +3,10 @@
   "type": "module",
   "main": "src/index.ts",
   "scripts": {
-    "build": "vp build",
+    "build": "vp pack",
+    "dev": "vpx wrangler dev src/index.ts --port 3000",
     "check-types": "tsc -b",
+    "test": "vp test",
     "compile": "bun build --compile --minify --sourcemap --bytecode ./src/index.ts --outfile server"
   },
   "dependencies": {
@@ -26,10 +28,10 @@
   "devDependencies": {
     "@cloudflare/workers-types": "catalog:",
     "@my-better-t-app/config": "workspace:*",
-    "@types/node": "^22.19.15",
+    "@types/node": "catalog:",
     "alchemy": "catalog:",
     "tsdown": "^0.21.2",
-    "typescript": "^5.9.3",
+    "typescript": "catalog:",
     "wrangler": "catalog:"
   }
 }

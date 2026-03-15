@@ -1,14 +1,12 @@
 {
   "extends": "../../packages/config/tsconfig.base.json",
   "compilerOptions": {
-    "lib": ["ESNext", "DOM"],
-    "target": "ESNext",
-    "module": "ESNext",
-    "moduleResolution": "bundler",
+    "lib": ["ES2023", "DOM"],
+    "target": "ES2022",
     "noEmit": true,
     "paths": {
-      "@/*": ["./src/*"]
-    }
+      "@/*": ["./src/*"],
+    },
   },
-  "include": ["src/**/*.ts", "electrobun.config.ts"]
+  "include": ["src/**/*.ts", "electrobun.config.ts"],
 }

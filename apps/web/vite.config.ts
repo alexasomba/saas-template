@@ -6,7 +6,13 @@ import { defineConfig } from "vite-plus";
 import tsconfigPaths from "vite-tsconfig-paths";
 
 export default defineConfig({
-  plugins: [tsconfigPaths(), tailwindcss(), tanstackStart(), viteReact(), alchemy()],
+  plugins: [
+    tsconfigPaths(),
+    tailwindcss(),
+    tanstackStart(),
+    viteReact(),
+    !process.env.VITEST && alchemy(),
+  ].filter(Boolean),
   server: {
     port: 3001,
   },

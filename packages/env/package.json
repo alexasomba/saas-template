@@ -16,7 +16,7 @@
   "devDependencies": {
     "@my-better-t-app/config": "workspace:*",
     "@my-better-t-app/infra": "workspace:*",
-    "@types/node": "^22.19.15",
-    "typescript": "^5.9.3"
+    "@types/node": "catalog:",
+    "typescript": "catalog:"
   }
 }

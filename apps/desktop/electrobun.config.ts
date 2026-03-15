@@ -18,7 +18,6 @@ export default {
     copy: {
       [webBuildDir]: "views/mainview",
     },
-    watchIgnore: [`${webBuildDir}/**`],
     mac: {
       bundleCEF: true,
       defaultRenderer: "cef",

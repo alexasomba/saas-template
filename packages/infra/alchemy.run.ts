@@ -4,18 +4,18 @@ import { Worker } from "alchemy/cloudflare";
 import { D1Database } from "alchemy/cloudflare";
 import { config } from "dotenv";
 
-config({ path: "./.env" });
-config({ path: "../../apps/web/.env" });
-config({ path: "../../apps/server/.env" });
+config({ path: ".env" });
+config({ path: "apps/web/.env" });
+config({ path: "apps/server/.env" });
 
 const app = await alchemy("my-better-t-app");
 
 const db = await D1Database("database", {
-  migrationsDir: "../../packages/db/src/migrations",
+  migrationsDir: "packages/db/src/migrations",
 });
 
 export const web = await TanStackStart("web", {
-  cwd: "../../apps/web",
+  cwd: "apps/web",
   bindings: {
     VITE_SERVER_URL: alchemy.env.VITE_SERVER_URL!,
     DB: db,
@@ -27,7 +27,7 @@ export const web = await TanStackStart("web", {
 });
 
 export const server = await Worker("server", {
-  cwd: "../../apps/server",
+  cwd: "apps/server",
   entrypoint: "src/index.ts",
   compatibility: "node",
   bindings: {
