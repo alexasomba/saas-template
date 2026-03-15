@@ -16,7 +16,7 @@
     "db:push": "drizzle-kit push",
     "db:pull": "drizzle-kit pull",
     "db:studio": "drizzle-kit studio",
-    "dev": "vp dev",
+    "dev": "vp dev --persist-to .wrangler/state",
     "build": "vp build",
     "serve": "vp preview",
     "dev:bare": "vp dev",

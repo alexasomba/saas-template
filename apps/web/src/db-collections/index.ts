@@ -9,9 +9,16 @@ const MessageSchema = z.object({
 
 export type Message = z.infer<typeof MessageSchema>;
 
-export const messagesCollection = createCollection(
-  localOnlyCollectionOptions({
-    getKey: (message) => message.id,
-    schema: MessageSchema,
-  }),
-);
+let _messagesCollection: any;
+
+export function getMessagesCollection() {
+  if (!_messagesCollection) {
+    _messagesCollection = createCollection(
+      localOnlyCollectionOptions({
+        getKey: (message: any) => message.id,
+        schema: MessageSchema,
+      }),
+    );
+  }
+  return _messagesCollection;
+}

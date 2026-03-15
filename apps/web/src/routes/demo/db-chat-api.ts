@@ -15,28 +15,35 @@ const MessageSchema = IncomingMessageSchema.extend({
 
 export type Message = z.infer<typeof MessageSchema>;
 
-export const serverMessagesCollection = createCollection(
-  localOnlyCollectionOptions({
-    getKey: (message) => message.id,
-    schema: MessageSchema,
-  }),
-);
+let _serverMessagesCollection: any;
+let _id = 0;
 
-let id = 0;
-serverMessagesCollection.insert({
-  id: id++,
-  user: "Alice",
-  text: "Hello, how are you?",
-});
-serverMessagesCollection.insert({
-  id: id++,
-  user: "Bob",
-  text: "I'm fine, thank you!",
-});
+function getServerMessagesCollection() {
+  if (!_serverMessagesCollection) {
+    _serverMessagesCollection = createCollection(
+      localOnlyCollectionOptions({
+        getKey: (message: any) => message.id,
+        schema: MessageSchema,
+      }),
+    );
+
+    _serverMessagesCollection.insert({
+      id: _id++,
+      user: "Alice",
+      text: "Hello, how are you?",
+    });
+    _serverMessagesCollection.insert({
+      id: _id++,
+      user: "Bob",
+      text: "I'm fine, thank you!",
+    });
+  }
+  return _serverMessagesCollection;
+}
 
 const sendMessage = (message: { user: string; text: string }) => {
-  serverMessagesCollection.insert({
-    id: id++,
+  getServerMessagesCollection().insert({
+    id: _id++,
     user: message.user,
     text: message.text,
   });
@@ -46,12 +53,13 @@ export const Route = createFileRoute("/demo/db-chat-api")({
   server: {
     handlers: {
       GET: () => {
+        const collection = getServerMessagesCollection();
         const stream = new ReadableStream({
           start(controller) {
-            for (const [_id, message] of serverMessagesCollection.state) {
+            for (const [_id, message] of collection.state) {
               controller.enqueue(JSON.stringify(message) + "\n");
             }
-            serverMessagesCollection.subscribeChanges((changes) => {
+            collection.subscribeChanges((changes: any) => {
               for (const change of changes) {
                 if (change.type === "insert") {
                   controller.enqueue(JSON.stringify(change.value) + "\n");
