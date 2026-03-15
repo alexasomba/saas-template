@@ -161,7 +161,14 @@ function StructuredPage() {
         body: JSON.stringify({ recipeName, mode }),
       });
 
-      const data = await response.json();
+      const data = (await response.json()) as {
+        mode: Mode;
+        recipe?: Recipe;
+        markdown?: string;
+        provider: string;
+        model: string;
+        error?: string;
+      };
 
       if (!response.ok) {
         throw new Error(data.error || "Failed to generate recipe");

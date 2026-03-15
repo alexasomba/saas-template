@@ -32,7 +32,7 @@ function ImagePage() {
         body: JSON.stringify({ prompt, size, numberOfImages }),
       });
 
-      const data = await response.json();
+      const data = (await response.json()) as { images: GeneratedImage[]; error?: string };
 
       if (!response.ok) {
         throw new Error(data.error || "Failed to generate image");

@@ -60,11 +60,11 @@ export function useAudioRecorder() {
           });
 
           if (!response.ok) {
-            const errorData = await response.json();
+            const errorData = (await response.json()) as { error?: string };
             throw new Error(errorData.error || "Transcription failed");
           }
 
-          const result = await response.json();
+          const result = (await response.json()) as { text?: string };
           setIsTranscribing(false);
           resolve(result.text || null);
         } catch (error) {

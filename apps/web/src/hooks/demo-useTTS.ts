@@ -29,11 +29,11 @@ export function useTTS() {
       });
 
       if (!response.ok) {
-        const errorData = await response.json();
+        const errorData = (await response.json()) as { error?: string };
         throw new Error(errorData.error || "TTS failed");
       }
 
-      const result = await response.json();
+      const result = (await response.json()) as { audio: string; contentType: string };
 
       // Convert base64 to audio and play
       const audioData = atob(result.audio);
