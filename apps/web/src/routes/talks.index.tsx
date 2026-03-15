@@ -17,10 +17,10 @@ function TalksPage() {
         {/* Hero section */}
         <div className="relative py-16 px-6">
           <div className="max-w-7xl mx-auto text-center">
-            <h1 className="font-display text-5xl md:text-6xl font-bold text-cream mb-4">
-              Conference <span className="text-gold italic">Sessions</span>
+            <h1 className="font-display text-5xl md:text-6xl font-bold text-foreground mb-4">
+              Conference <span className="text-secondary italic">Sessions</span>
             </h1>
-            <p className="text-xl text-cream/70 max-w-2xl mx-auto font-body">
+            <p className="text-xl text-muted-foreground max-w-2xl mx-auto font-body">
               Immerse yourself in masterclasses and demonstrations covering every aspect of artisan
               baking and pastry.
             </p>

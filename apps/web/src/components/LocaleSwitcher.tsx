@@ -11,10 +11,10 @@ export default function ParaglideLocaleSwitcher() {
 
   return (
     <div
-      className="flex items-center gap-2 px-1 pr-1.5 py-1 rounded-xl bg-white/5 border border-border/30 shrink-0"
+      className="flex items-center gap-2 px-1 pr-1.5 py-1 rounded-xl bg-accent/50 border border-border/50 shrink-0"
       aria-label={m.language_label()}
     >
-      <span className="text-[10px] font-bold tracking-widest uppercase text-cream/40 pl-2 select-none">
+      <span className="text-[10px] font-bold tracking-widest uppercase text-muted-foreground/60 pl-2 select-none">
         {currentLocale}
       </span>
       <div className="flex gap-1">
@@ -27,8 +27,8 @@ export default function ParaglideLocaleSwitcher() {
               cursor-pointer px-2 py-1 rounded-lg text-[10px] font-bold tracking-wider transition-all
               ${
                 locale === currentLocale
-                  ? "bg-copper text-charcoal shadow-sm shadow-copper/20"
-                  : "text-cream/50 hover:text-cream hover:bg-white/5"
+                  ? "bg-secondary text-secondary-foreground shadow-sm shadow-secondary/20"
+                  : "text-muted-foreground hover:text-foreground hover:bg-accent"
               }
             `}
           >

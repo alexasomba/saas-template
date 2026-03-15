@@ -33,9 +33,7 @@ function Messages({ messages }: { messages: ChatMessages }) {
         <div
           key={id}
           className={`py-4 ${
-            role === "assistant"
-              ? "bg-linear-to-r from-copper/5 via-gold/5 to-copper/5"
-              : "bg-transparent"
+            role === "assistant" ? "bg-secondary/5 border-y border-secondary/10" : "bg-transparent"
           }`}
         >
           {parts.map((part, index) => {
@@ -43,15 +41,15 @@ function Messages({ messages }: { messages: ChatMessages }) {
               return (
                 <div key={index} className="flex items-start gap-3 px-6">
                   {role === "assistant" ? (
-                    <div className="w-7 h-7 rounded-lg bg-emerald-700/80 flex items-center justify-center text-xs font-bold text-white shrink-0 shadow-lg shadow-emerald-900/20">
+                    <div className="w-7 h-7 rounded-lg bg-primary flex items-center justify-center text-[10px] font-bold text-primary-foreground shrink-0 shadow-lg shadow-primary/20">
                       AI
                     </div>
                   ) : (
-                    <div className="w-7 h-7 rounded-lg bg-charcoal-light flex items-center justify-center text-xs font-bold text-cream/70 shrink-0 border border-border/50">
+                    <div className="w-7 h-7 rounded-lg bg-muted flex items-center justify-center text-[10px] font-bold text-muted-foreground shrink-0 border border-border/50">
                       U
                     </div>
                   )}
-                  <div className="flex-1 min-w-0 text-cream prose dark:prose-invert max-w-none prose-sm prose-p:text-cream prose-headings:text-cream prose-strong:text-gold">
+                  <div className="flex-1 min-w-0 prose dark:prose-invert max-w-none prose-sm prose-p:text-foreground prose-headings:text-foreground prose-strong:text-secondary">
                     <Streamdown>{part.content}</Streamdown>
                   </div>
                 </div>
@@ -80,27 +78,29 @@ export default function AIAssistant() {
     <div className="relative">
       <button
         onClick={() => showAIAssistant.setState((state) => !state)}
-        className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-emerald-700/80 text-white hover:bg-emerald-600 transition-all border border-emerald-500/30 shadow-lg shadow-emerald-900/20 group"
+        className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-accent/50 text-foreground hover:bg-accent transition-all border border-border/50 shadow-sm group"
       >
         <div className="relative">
           <Robot size={18} className="group-hover:rotate-12 transition-transform" />
-          <div className="absolute -top-1 -right-1 w-2 h-2 bg-emerald-400 rounded-full animate-pulse border border-emerald-900" />
+          <div className="absolute -top-1 -right-1 w-2 h-2 bg-primary rounded-full animate-pulse border border-background" />
         </div>
         <span className="text-xs font-bold tracking-tight hidden md:block">AI Assistant</span>
       </button>
 
       {isOpen && (
-        <div className="absolute top-full right-0 mt-3 w-175 h-150 bg-charcoal rounded-2xl shadow-2xl border border-copper/20 flex flex-col backdrop-blur-2xl">
-          <div className="flex items-center justify-between p-4 border-b border-copper/10 bg-charcoal/50">
+        <div className="absolute top-full right-0 mt-3 w-175 h-150 bg-card rounded-2xl shadow-2xl border border-border flex flex-col backdrop-blur-2xl">
+          <div className="flex items-center justify-between p-4 border-b border-border bg-muted/30">
             <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-lg bg-emerald-700/80 flex items-center justify-center text-white shadow-lg shadow-emerald-900/20">
+              <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center text-primary-foreground shadow-lg shadow-primary/20">
                 <Robot size={20} />
               </div>
-              <h3 className="font-display font-bold text-cream tracking-tight">AI Assistant</h3>
+              <h3 className="font-display font-bold text-foreground tracking-tight">
+                AI Assistant
+              </h3>
             </div>
             <button
               onClick={() => showAIAssistant.setState((state) => !state)}
-              className="text-cream/50 hover:text-cream hover:bg-white/5 p-2 rounded-xl transition-all"
+              className="text-muted-foreground hover:text-foreground hover:bg-accent p-2 rounded-xl transition-all"
             >
               <X className="w-4 h-4" />
             </button>
@@ -108,7 +108,7 @@ export default function AIAssistant() {
 
           <Messages messages={messages} />
 
-          <div className="p-4 border-t border-copper/10 bg-charcoal/50">
+          <div className="p-4 border-t border-border bg-muted/30">
             <form
               onSubmit={(e) => {
                 e.preventDefault();
@@ -123,7 +123,7 @@ export default function AIAssistant() {
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
                   placeholder="Type your message..."
-                  className="w-full rounded-xl border border-copper/20 bg-charcoal-light/50 pl-4 pr-12 py-3 text-sm text-cream placeholder-cream/30 focus:outline-none focus:ring-2 focus:ring-copper/40 focus:border-transparent resize-none overflow-hidden transition-all"
+                  className="w-full rounded-xl border border-border bg-background pl-4 pr-12 py-3 text-sm text-foreground placeholder-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all resize-none shadow-sm"
                   rows={1}
                   style={{ minHeight: "48px", maxHeight: "120px" }}
                   onInput={(e) => {
@@ -142,7 +142,7 @@ export default function AIAssistant() {
                 <button
                   type="submit"
                   disabled={!input.trim()}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 p-2 rounded-lg bg-emerald-700 text-white disabled:opacity-30 transition-all hover:bg-emerald-600 shadow-lg shadow-emerald-900/20"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 p-2 rounded-lg bg-primary text-primary-foreground disabled:opacity-30 transition-all hover:bg-primary/90 shadow-lg shadow-primary/20"
                 >
                   <PaperPlaneRight className="w-4 h-4" />
                 </button>

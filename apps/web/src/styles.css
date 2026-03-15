@@ -16,8 +16,66 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
 }
 
-/* Haute Patisserie Dark Theme */
+/* Haute Patisserie Theme */
 :root {
+  /* Core colors - Light elegant bakery */
+  --background: oklch(0.95 0.01 85);
+  --foreground: oklch(0.13 0.01 60);
+
+  /* Warm cream for cards */
+  --card: oklch(0.98 0.01 85);
+  --card-foreground: oklch(0.13 0.01 60);
+
+  /* Copper accent */
+  --primary: oklch(0.65 0.14 55);
+  --primary-foreground: oklch(0.98 0.01 85);
+
+  /* Antique gold */
+  --secondary: oklch(0.72 0.12 85);
+  --secondary-foreground: oklch(0.13 0.01 60);
+
+  /* Muted warm tones */
+  --muted: oklch(0.92 0.02 85);
+  --muted-foreground: oklch(0.45 0.03 60);
+
+  /* Accent - rich copper */
+  --accent: oklch(0.85 0.1 55);
+  --accent-foreground: oklch(0.13 0.01 60);
+
+  /* Destructive */
+  --destructive: oklch(0.55 0.2 25);
+  --destructive-foreground: oklch(0.98 0.01 85);
+
+  /* Borders and inputs */
+  --border: oklch(0.85 0.03 85);
+  --input: oklch(0.9 0.02 85);
+  --ring: oklch(0.65 0.14 55);
+
+  /* Chart colors - pastry inspired */
+  --chart-1: oklch(0.65 0.14 55);
+  --chart-2: oklch(0.72 0.12 85);
+  --chart-3: oklch(0.55 0.15 45);
+  --chart-4: oklch(0.6 0.1 30);
+  --chart-5: oklch(0.5 0.08 150);
+
+  --radius: 0.625rem;
+
+  /* Popover */
+  --popover: oklch(0.98 0.01 85);
+  --popover-foreground: oklch(0.13 0.01 60);
+
+  /* Sidebar */
+  --sidebar: oklch(0.96 0.01 85);
+  --sidebar-foreground: oklch(0.13 0.01 60);
+  --sidebar-primary: oklch(0.65 0.14 55);
+  --sidebar-primary-foreground: oklch(0.98 0.01 85);
+  --sidebar-accent: oklch(0.9 0.02 85);
+  --sidebar-accent-foreground: oklch(0.13 0.01 60);
+  --sidebar-border: oklch(0.85 0.03 85);
+  --sidebar-ring: oklch(0.65 0.14 55);
+}
+
+.dark {
   /* Core colors - Dark elegant bakery */
   --background: oklch(0.13 0.01 60);
   --foreground: oklch(0.93 0.02 85);
@@ -57,8 +115,6 @@ code {
   --chart-3: oklch(0.55 0.15 45);
   --chart-4: oklch(0.6 0.1 30);
   --chart-5: oklch(0.5 0.08 150);
-
-  --radius: 0.625rem;
 
   /* Popover */
   --popover: oklch(0.17 0.015 55);
@@ -116,7 +172,7 @@ code {
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
 
-  /* Custom colors for the theme */
+  /* Custom colors for the theme - absolute values preserved for cases where specific color is needed */
   --color-copper: oklch(0.65 0.14 55);
   --color-copper-light: oklch(0.75 0.12 55);
   --color-copper-dark: oklch(0.5 0.15 50);

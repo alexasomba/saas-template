@@ -13,18 +13,14 @@ var speakers = defineCollection({
     location: z.string(),
     headshot: z.string(),
     awards: z.array(z.string()).optional(),
-    content: z.string(),
+    content: z.string()
   }),
   transform: async (doc) => {
     return {
       ...doc,
-      slug: doc.name
-        .toLowerCase()
-        .replace(/[^\w-]+/g, "-")
-        .replace(/-+/g, "-")
-        .replace(/^-|-$/g, ""),
+      slug: doc.name.toLowerCase().replace(/[^\w-]+/g, "-").replace(/-+/g, "-").replace(/^-|-$/g, "")
     };
-  },
+  }
 });
 var talks = defineCollection({
   name: "talks",
@@ -36,20 +32,18 @@ var talks = defineCollection({
     duration: z.string(),
     image: z.string(),
     topics: z.array(z.string()),
-    content: z.string(),
+    content: z.string()
   }),
   transform: async (doc) => {
     return {
       ...doc,
-      slug: doc.title
-        .toLowerCase()
-        .replace(/[^\w-]+/g, "-")
-        .replace(/-+/g, "-")
-        .replace(/^-|-$/g, ""),
+      slug: doc.title.toLowerCase().replace(/[^\w-]+/g, "-").replace(/-+/g, "-").replace(/^-|-$/g, "")
     };
-  },
+  }
 });
 var content_collections_default = defineConfig({
-  content: [speakers, talks],
+  content: [speakers, talks]
 });
-export { content_collections_default as default };
+export {
+  content_collections_default as default
+};

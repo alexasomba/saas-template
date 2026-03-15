@@ -31,11 +31,11 @@ export default function HeroCarousel() {
         </div>
       ))}
 
-      {/* Dark overlay for text readability */}
-      <div className="absolute inset-0 bg-gradient-to-b from-charcoal/70 via-charcoal/60 to-charcoal" />
+      {/* Overlay for text readability - slightly darker in light mode to ensure white text works or swap to themed overlay */}
+      <div className="absolute inset-0 bg-linear-to-b from-background/70 via-background/60 to-background" />
 
       {/* Subtle vignette effect */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_0%,rgba(26,26,26,0.4)_100%)]" />
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_0%,rgba(0,0,0,0.3)_100%)]" />
 
       {/* Carousel indicators */}
       <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex gap-2 z-10">
@@ -44,7 +44,9 @@ export default function HeroCarousel() {
             key={index}
             onClick={() => setCurrentIndex(index)}
             className={`w-2 h-2 rounded-full transition-all duration-300 ${
-              index === currentIndex ? "bg-gold w-6" : "bg-cream/30 hover:bg-cream/50"
+              index === currentIndex
+                ? "bg-secondary w-6"
+                : "bg-foreground/20 hover:bg-foreground/40"
             }`}
             aria-label={`Go to slide ${index + 1}`}
           />

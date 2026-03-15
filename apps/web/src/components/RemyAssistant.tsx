@@ -16,49 +16,43 @@ function Messages({ messages }: { messages: ConferenceChatMessages }) {
     }
   }, [messages]);
 
-  if (!messages.length) {
-    return (
-      <div className="flex-1 flex flex-col items-center justify-center text-cream/60 text-sm px-6 py-8">
-        <div className="relative mb-4">
-          <ChefHat className="w-12 h-12 text-copper/60 animate-pulse" />
-          <Cookie className="w-6 h-6 text-gold/60 absolute -bottom-1 -right-1" />
-        </div>
-        <p className="text-center text-cream/80 font-medium font-display text-lg">
-          Bonjour! I'm Remy 👨‍🍳
-        </p>
-        <p className="text-xs text-cream/40 mt-2 text-center max-w-55">
-          Your culinary guide to Haute Pâtisserie 2026. Ask about speakers, sessions, or pastry
-          techniques!
-        </p>
+  return (
+    <div className="flex-1 flex flex-col items-center justify-center text-muted-foreground/60 text-sm px-6 py-8">
+      <div className="relative mb-4">
+        <ChefHat className="w-12 h-12 text-primary/60 animate-pulse" />
+        <Cookie className="w-6 h-6 text-secondary/60 absolute -bottom-1 -right-1" />
       </div>
-    );
-  }
+      <p className="text-center text-foreground font-medium font-display text-lg">
+        Bonjour! I'm Remy 👨‍🍳
+      </p>
+      <p className="text-xs text-muted-foreground mt-2 text-center max-w-55">
+        Your culinary guide to Haute Pâtisserie 2026. Ask about speakers, sessions, or pastry
+        techniques!
+      </p>
+    </div>
+  );
 
   return (
     <div ref={messagesContainerRef} className="flex-1 overflow-y-auto">
       {messages.map(({ id, role, parts }) => (
         <div
           key={id}
-          className={`py-3 ${
-            role === "assistant"
-              ? "bg-linear-to-r from-copper/5 via-gold/5 to-copper/5"
-              : "bg-transparent"
-          }`}
+          className={`py-3 ${role === "assistant" ? "bg-secondary/5" : "bg-transparent"}`}
         >
           {parts.map((part, index) => {
             if (part.type === "text" && part.content) {
               return (
                 <div key={index} className="flex items-start gap-3 px-4">
                   {role === "assistant" ? (
-                    <div className="w-7 h-7 rounded-full bg-linear-to-br from-copper via-copper-dark to-gold flex items-center justify-center text-xs font-bold text-charcoal shrink-0 shadow-lg shadow-copper/20">
+                    <div className="w-7 h-7 rounded-full bg-primary flex items-center justify-center text-xs font-bold text-primary-foreground shrink-0 shadow-lg shadow-primary/20">
                       👨‍🍳
                     </div>
                   ) : (
-                    <div className="w-7 h-7 rounded-full bg-charcoal-light flex items-center justify-center text-xs font-medium text-cream shrink-0 border border-border/50">
+                    <div className="w-7 h-7 rounded-full bg-muted flex items-center justify-center text-xs font-medium text-muted-foreground shrink-0 border border-border/50">
                       You
                     </div>
                   )}
-                  <div className="flex-1 min-w-0 text-cream prose dark:prose-invert max-w-none prose-sm prose-p:text-cream prose-headings:text-cream prose-strong:text-gold">
+                  <div className="flex-1 min-w-0 text-foreground prose dark:prose-invert max-w-none prose-sm prose-p:text-foreground prose-headings:text-foreground prose-strong:text-secondary">
                     <Streamdown>{part.content}</Streamdown>
                   </div>
                 </div>
@@ -97,26 +91,28 @@ export default function RemyAssistant({ speakerSlug, talkSlug, contextTitle }: R
   if (!isOpen) return null;
 
   return (
-    <div className="fixed top-20 right-6 z-100 w-100 h-130 rounded-2xl shadow-2xl flex flex-col overflow-hidden border border-copper/20 backdrop-blur-2xl bg-linear-to-b from-charcoal/98 via-charcoal/95 to-charcoal-light/98">
+    <div className="fixed top-20 right-6 z-100 w-100 h-130 rounded-2xl shadow-2xl flex flex-col overflow-hidden border border-border/50 backdrop-blur-2xl bg-card/98">
       {/* Decorative top gradient */}
-      <div className="absolute top-0 left-0 right-0 h-32 bg-linear-to-b from-copper/10 via-gold/5 to-transparent pointer-events-none" />
+      <div className="absolute top-0 left-0 right-0 h-32 bg-linear-to-b from-primary/10 via-secondary/5 to-transparent pointer-events-none" />
 
       {/* Header */}
-      <div className="relative flex items-center justify-between p-4 border-b border-copper/10">
+      <div className="relative flex items-center justify-between p-4 border-b border-border/30">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-linear-to-br from-copper via-copper-dark to-gold flex items-center justify-center shadow-lg shadow-copper/30 rotate-3 hover:rotate-0 transition-transform">
+          <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center shadow-lg shadow-primary/30 rotate-3 hover:rotate-0 transition-transform">
             <span className="text-lg">👨‍🍳</span>
           </div>
           <div>
-            <h3 className="font-display font-bold text-cream text-base tracking-tight">Remy</h3>
+            <h3 className="font-display font-bold text-foreground text-base tracking-tight">
+              Remy
+            </h3>
             {contextTitle && (
-              <p className="text-xs text-copper/70 truncate max-w-55">🥐 {contextTitle}</p>
+              <p className="text-xs text-muted-foreground truncate max-w-55">🥐 {contextTitle}</p>
             )}
           </div>
         </div>
         <button
           onClick={handleToggle}
-          className="text-cream/50 hover:text-cream transition-colors p-2 hover:bg-white/5 rounded-xl"
+          className="text-muted-foreground hover:text-foreground transition-colors p-2 hover:bg-accent rounded-xl"
         >
           <X className="w-5 h-5" />
         </button>
@@ -127,12 +123,12 @@ export default function RemyAssistant({ speakerSlug, talkSlug, contextTitle }: R
 
       {/* Loading indicator */}
       {isLoading && (
-        <div className="px-4 py-3 border-t border-copper/10">
-          <div className="flex items-center gap-2 text-copper/80 text-xs">
+        <div className="px-4 py-3 border-t border-border/30">
+          <div className="flex items-center gap-2 text-muted-foreground text-xs">
             <div className="flex gap-1">
-              <span className="w-2 h-2 bg-copper rounded-full animate-bounce [animation-delay:-0.3s]"></span>
-              <span className="w-2 h-2 bg-gold rounded-full animate-bounce [animation-delay:-0.15s]"></span>
-              <span className="w-2 h-2 bg-copper-light rounded-full animate-bounce"></span>
+              <span className="w-2 h-2 bg-primary rounded-full animate-bounce [animation-delay:-0.3s]"></span>
+              <span className="w-2 h-2 bg-secondary rounded-full animate-bounce [animation-delay:-0.15s]"></span>
+              <span className="w-2 h-2 bg-primary/40 rounded-full animate-bounce"></span>
             </div>
             <span className="font-medium">Crafting a response...</span>
           </div>
@@ -140,7 +136,7 @@ export default function RemyAssistant({ speakerSlug, talkSlug, contextTitle }: R
       )}
 
       {/* Input */}
-      <div className="relative p-4 border-t border-copper/10 bg-charcoal/50">
+      <div className="relative p-4 border-t border-border/30 bg-accent/30">
         <form
           onSubmit={(e) => {
             e.preventDefault();
@@ -153,7 +149,7 @@ export default function RemyAssistant({ speakerSlug, talkSlug, contextTitle }: R
               onChange={(e) => setInput(e.target.value)}
               placeholder="Ask about speakers, sessions, techniques..."
               disabled={isLoading}
-              className="w-full rounded-xl border border-copper/20 bg-charcoal-light/50 pl-4 pr-12 py-3 text-sm text-cream placeholder-cream/30 focus:outline-none focus:ring-2 focus:ring-copper/40 focus:border-transparent resize-none overflow-hidden disabled:opacity-50 transition-all"
+              className="w-full rounded-xl border border-border bg-background pl-4 pr-12 py-3 text-sm text-foreground placeholder-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-transparent resize-none overflow-hidden disabled:opacity-50 transition-all"
               rows={1}
               style={{ minHeight: "48px", maxHeight: "100px" }}
               onInput={(e) => {
@@ -171,7 +167,7 @@ export default function RemyAssistant({ speakerSlug, talkSlug, contextTitle }: R
             <button
               type="submit"
               disabled={!input.trim() || isLoading}
-              className="absolute right-3 top-1/2 -translate-y-1/2 p-2 rounded-lg bg-linear-to-r from-copper to-copper-dark text-charcoal disabled:opacity-30 disabled:bg-gray-600 disabled:from-gray-600 disabled:to-gray-600 transition-all hover:shadow-lg hover:shadow-copper/20"
+              className="absolute right-3 top-1/2 -translate-y-1/2 p-2 rounded-lg bg-primary text-primary-foreground disabled:opacity-30 disabled:bg-muted transition-all hover:shadow-lg hover:shadow-primary/20"
             >
               <PaperPlaneRight className="w-4 h-4" />
             </button>

@@ -21,27 +21,27 @@ function HomePage() {
       <RemyAssistant />
 
       {/* Hero Section */}
-      <section className="relative min-h-[90vh] flex items-center justify-center px-6 overflow-hidden">
+      <section className="relative min-h-[90vh] flex items-center justify-center px-6 overflow-hidden bg-background">
         {/* Background carousel */}
         <HeroCarousel />
 
         <div className="relative max-w-5xl mx-auto text-center z-10">
           {/* Event date badge */}
-          <div className="inline-flex items-center gap-2 px-4 py-2 mb-8 rounded-full bg-copper/10 border border-copper/30 text-copper-light text-sm font-medium">
+          <div className="inline-flex items-center gap-2 px-4 py-2 mb-8 rounded-full bg-primary/10 border border-primary/30 text-primary-foreground/90 text-sm font-medium backdrop-blur-md">
             <Calendar className="w-4 h-4" />
             <span>March 15-17, 2026</span>
-            <span className="mx-2 text-copper/40">•</span>
+            <span className="mx-2 text-primary/40">•</span>
             <MapPin className="w-4 h-4" />
             <span>Paris, France</span>
           </div>
 
           {/* Main title */}
-          <h1 className="font-display text-6xl md:text-8xl font-bold text-cream mb-6 leading-tight">
+          <h1 className="font-display text-6xl md:text-8xl font-bold text-foreground mb-6 leading-tight">
             Haute
-            <span className="block text-gold italic">Pâtisserie</span>
+            <span className="block text-secondary italic">Pâtisserie</span>
           </h1>
 
-          <p className="text-xl md:text-2xl text-cream/70 font-body max-w-3xl mx-auto mb-10 leading-relaxed">
+          <p className="text-xl md:text-2xl text-muted-foreground font-body max-w-3xl mx-auto mb-10 leading-relaxed">
             Join the world's most celebrated pastry chefs and master bakers for three extraordinary
             days of masterclasses, demonstrations, and culinary inspiration.
           </p>
@@ -49,16 +49,24 @@ function HomePage() {
           {/* Stats */}
           <div className="flex flex-wrap justify-center gap-8 mb-12">
             <div className="text-center">
-              <div className="text-4xl font-display font-bold text-gold">{allSpeakers.length}</div>
-              <div className="text-cream/50 text-sm uppercase tracking-wider">Master Chefs</div>
+              <div className="text-4xl font-display font-bold text-secondary">
+                {allSpeakers.length}
+              </div>
+              <div className="text-muted-foreground/50 text-sm uppercase tracking-wider">
+                Master Chefs
+              </div>
             </div>
             <div className="text-center">
-              <div className="text-4xl font-display font-bold text-gold">{allTalks.length}</div>
-              <div className="text-cream/50 text-sm uppercase tracking-wider">Sessions</div>
+              <div className="text-4xl font-display font-bold text-secondary">
+                {allTalks.length}
+              </div>
+              <div className="text-muted-foreground/50 text-sm uppercase tracking-wider">
+                Sessions
+              </div>
             </div>
             <div className="text-center">
-              <div className="text-4xl font-display font-bold text-gold">3</div>
-              <div className="text-cream/50 text-sm uppercase tracking-wider">Days</div>
+              <div className="text-4xl font-display font-bold text-secondary">3</div>
+              <div className="text-muted-foreground/50 text-sm uppercase tracking-wider">Days</div>
             </div>
           </div>
 
@@ -66,14 +74,14 @@ function HomePage() {
           <div className="flex flex-wrap justify-center gap-4">
             <Link
               to="/speakers"
-              className="inline-flex items-center gap-2 px-8 py-4 rounded-full bg-linear-to-r from-copper to-copper-dark text-charcoal font-semibold text-lg transition-all hover:shadow-lg hover:shadow-copper/30 hover:scale-[1.02]"
+              className="inline-flex items-center gap-2 px-8 py-4 rounded-full bg-primary text-primary-foreground font-semibold text-lg transition-all hover:shadow-lg hover:shadow-primary/30 hover:scale-[1.02]"
             >
               <Users className="w-5 h-5" />
               Meet Our Speakers
             </Link>
             <Link
               to="/talks"
-              className="inline-flex items-center gap-2 px-8 py-4 rounded-full border-2 border-gold/50 text-gold font-semibold text-lg transition-all hover:bg-gold/10 hover:border-gold"
+              className="inline-flex items-center gap-2 px-8 py-4 rounded-full border-2 border-secondary/50 text-secondary font-semibold text-lg transition-all hover:bg-secondary/10 hover:border-secondary"
             >
               View Sessions
               <ArrowRight className="w-5 h-5" />
@@ -83,20 +91,20 @@ function HomePage() {
       </section>
 
       {/* Featured Speakers Section */}
-      <section className="py-20 px-6">
+      <section className="py-20 px-6 bg-background">
         <div className="max-w-7xl mx-auto">
           <div className="flex items-end justify-between mb-12">
             <div>
-              <h2 className="font-display text-4xl md:text-5xl font-bold text-cream mb-3">
-                Featured <span className="text-gold italic">Speakers</span>
+              <h2 className="font-display text-4xl md:text-5xl font-bold text-foreground mb-3">
+                Featured <span className="text-secondary italic">Speakers</span>
               </h2>
-              <p className="text-cream/60 text-lg font-body">
+              <p className="text-muted-foreground text-lg font-body">
                 Learn from award-winning pastry chefs and master bakers
               </p>
             </div>
             <Link
               to="/speakers"
-              className="hidden md:inline-flex items-center gap-2 text-gold hover:text-gold/80 transition-colors font-medium"
+              className="hidden md:inline-flex items-center gap-2 text-secondary hover:text-secondary/80 transition-colors font-medium"
             >
               View all speakers
               <ArrowRight className="w-4 h-4" />
@@ -112,7 +120,7 @@ function HomePage() {
           <div className="md:hidden mt-8 text-center">
             <Link
               to="/speakers"
-              className="inline-flex items-center gap-2 text-gold hover:text-gold/80 transition-colors font-medium"
+              className="inline-flex items-center gap-2 text-secondary hover:text-secondary/80 transition-colors font-medium"
             >
               View all speakers
               <ArrowRight className="w-4 h-4" />
@@ -127,20 +135,20 @@ function HomePage() {
       </div>
 
       {/* Featured Sessions Section */}
-      <section className="py-20 px-6">
+      <section className="py-20 px-6 bg-background">
         <div className="max-w-7xl mx-auto">
           <div className="flex items-end justify-between mb-12">
             <div>
-              <h2 className="font-display text-4xl md:text-5xl font-bold text-cream mb-3">
-                Featured <span className="text-gold italic">Sessions</span>
+              <h2 className="font-display text-4xl md:text-5xl font-bold text-foreground mb-3">
+                Featured <span className="text-secondary italic">Sessions</span>
               </h2>
-              <p className="text-cream/60 text-lg font-body">
+              <p className="text-muted-foreground text-lg font-body">
                 Masterclasses and demonstrations to elevate your craft
               </p>
             </div>
             <Link
               to="/talks"
-              className="hidden md:inline-flex items-center gap-2 text-gold hover:text-gold/80 transition-colors font-medium"
+              className="hidden md:inline-flex items-center gap-2 text-secondary hover:text-secondary/80 transition-colors font-medium"
             >
               View all sessions
               <ArrowRight className="w-4 h-4" />
@@ -156,7 +164,7 @@ function HomePage() {
           <div className="md:hidden mt-8 text-center">
             <Link
               to="/talks"
-              className="inline-flex items-center gap-2 text-gold hover:text-gold/80 transition-colors font-medium"
+              className="inline-flex items-center gap-2 text-secondary hover:text-secondary/80 transition-colors font-medium"
             >
               View all sessions
               <ArrowRight className="w-4 h-4" />
@@ -166,22 +174,22 @@ function HomePage() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 px-6">
+      <section className="py-20 px-6 bg-background">
         <div className="max-w-4xl mx-auto text-center">
-          <div className="relative p-12 rounded-3xl bg-linear-to-br from-card to-charcoal border border-border/50 overflow-hidden">
+          <div className="relative p-12 rounded-3xl bg-card border border-border/50 overflow-hidden">
             {/* Decorative elements */}
-            <div className="absolute top-0 right-0 w-64 h-64 bg-copper/5 rounded-full blur-3xl" />
-            <div className="absolute bottom-0 left-0 w-48 h-48 bg-gold/5 rounded-full blur-3xl" />
+            <div className="absolute top-0 right-0 w-64 h-64 bg-primary/5 rounded-full blur-3xl" />
+            <div className="absolute bottom-0 left-0 w-48 h-48 bg-secondary/5 rounded-full blur-3xl" />
 
             <div className="relative">
-              <h2 className="font-display text-3xl md:text-4xl font-bold text-cream mb-4">
+              <h2 className="font-display text-3xl md:text-4xl font-bold text-foreground mb-4">
                 Ready to Elevate Your Craft?
               </h2>
-              <p className="text-cream/60 text-lg font-body mb-8 max-w-2xl mx-auto">
+              <p className="text-muted-foreground text-lg font-body mb-8 max-w-2xl mx-auto">
                 Join us in Paris for an unforgettable experience with the world's finest pastry
                 artisans.
               </p>
-              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gold/10 border border-gold/30 text-gold text-sm font-medium">
+              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-secondary/10 border border-secondary/30 text-secondary text-sm font-medium">
                 <span>🥐</span>
                 <span>Registration opens January 2026</span>
               </div>

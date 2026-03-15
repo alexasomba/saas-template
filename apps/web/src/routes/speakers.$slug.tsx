@@ -31,7 +31,7 @@ function SpeakerDetailPage() {
       <div className="max-w-7xl mx-auto px-6 py-4">
         <Link
           to="/speakers"
-          className="inline-flex items-center gap-2 text-cream/60 hover:text-gold transition-colors"
+          className="inline-flex items-center gap-2 text-muted-foreground hover:text-secondary transition-colors"
         >
           <ArrowLeft className="w-4 h-4" />
           <span>All Speakers</span>
@@ -56,18 +56,18 @@ function SpeakerDetailPage() {
             {/* Info */}
             <div className="lg:col-span-2 flex flex-col justify-center">
               {/* Specialty tag */}
-              <span className="inline-block w-fit px-4 py-1.5 text-sm font-medium tracking-wider uppercase bg-copper/20 text-copper-light rounded-full border border-copper/30 mb-4">
+              <span className="inline-block w-fit px-4 py-1.5 text-sm font-medium tracking-wider uppercase bg-primary/20 text-primary rounded-full border border-primary/30 mb-4">
                 {speaker.specialty}
               </span>
 
-              <h1 className="font-display text-5xl md:text-6xl font-bold text-cream mb-3">
+              <h1 className="font-display text-5xl md:text-6xl font-bold text-foreground mb-3">
                 {speaker.name}
               </h1>
 
-              <p className="text-2xl text-gold font-display italic mb-4">{speaker.title}</p>
+              <p className="text-2xl text-secondary font-display italic mb-4">{speaker.title}</p>
 
-              <div className="flex items-center gap-2 text-cream/60 text-lg mb-8">
-                <MapPin className="w-5 h-5 text-copper" />
+              <div className="flex items-center gap-2 text-muted-foreground text-lg mb-8">
+                <MapPin className="w-5 h-5 text-primary" />
                 <span>
                   {speaker.restaurant}, {speaker.location}
                 </span>
@@ -76,14 +76,14 @@ function SpeakerDetailPage() {
               {/* Awards */}
               {speaker.awards && speaker.awards.length > 0 && (
                 <div className="space-y-3">
-                  <h3 className="text-sm font-medium tracking-wider uppercase text-cream/50">
+                  <h3 className="text-sm font-medium tracking-wider uppercase text-muted-foreground/50">
                     Awards & Recognition
                   </h3>
                   <div className="flex flex-wrap gap-2">
                     {speaker.awards.map((award) => (
                       <span
                         key={award}
-                        className="inline-flex items-center gap-2 px-3 py-1.5 text-sm bg-gold/10 text-gold/90 rounded-lg border border-gold/20"
+                        className="inline-flex items-center gap-2 px-3 py-1.5 text-sm bg-secondary/10 text-secondary rounded-lg border border-secondary/20"
                       >
                         <Medal className="w-3.5 h-3.5" />
                         {award}
@@ -99,7 +99,7 @@ function SpeakerDetailPage() {
 
       {/* Bio section */}
       <div className="max-w-4xl mx-auto px-6 py-12">
-        <div className="prose prose-lg max-w-none prose-invert prose-p:text-cream/80 prose-headings:text-cream prose-headings:font-display prose-strong:text-cream prose-a:text-gold font-body text-lg leading-relaxed">
+        <div className="prose prose-lg max-w-none dark:prose-invert prose-headings:text-foreground prose-headings:font-display prose-p:text-foreground prose-strong:text-foreground prose-a:text-secondary font-body text-lg leading-relaxed">
           <div dangerouslySetInnerHTML={{ __html: marked(speaker.content) }} />
         </div>
       </div>
@@ -107,7 +107,7 @@ function SpeakerDetailPage() {
       {/* Speaker's talks */}
       {speakerTalks.length > 0 && (
         <div className="max-w-7xl mx-auto px-6 py-12">
-          <h2 className="font-display text-3xl font-bold text-cream mb-8">
+          <h2 className="font-display text-3xl font-bold text-foreground mb-8">
             Sessions by {speaker.name}
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">

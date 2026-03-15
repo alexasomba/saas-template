@@ -72,7 +72,7 @@ export default function ThemeToggle() {
       onClick={toggleMode}
       aria-label={label}
       title={label}
-      className="px-3 py-1.5 rounded-lg text-xs font-bold tracking-tight text-cream/70 hover:text-cream hover:bg-white/5 border border-border/30 transition-all select-none"
+      className="px-3 py-1.5 rounded-lg text-xs font-bold tracking-tight text-muted-foreground hover:text-foreground hover:bg-accent border border-border/50 transition-all select-none"
     >
       <span className="opacity-50 mr-1.5 font-normal tracking-normal text-[10px] uppercase">
         Mode:

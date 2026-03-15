@@ -29,7 +29,7 @@ function TalkDetailPage() {
       <div className="max-w-7xl mx-auto px-6 py-4">
         <Link
           to="/talks"
-          className="inline-flex items-center gap-2 text-cream/60 hover:text-gold transition-colors"
+          className="inline-flex items-center gap-2 text-muted-foreground hover:text-secondary transition-colors"
         >
           <ArrowLeft className="w-4 h-4" />
           <span>All Sessions</span>
@@ -41,7 +41,7 @@ function TalkDetailPage() {
         <div className="w-full h-full rounded-2xl overflow-hidden border border-border/50">
           <img src={`/${talk.image}`} alt={talk.title} className="w-full h-full object-cover" />
         </div>
-        <div className="absolute inset-6 bg-linear-to-t from-charcoal/60 to-transparent rounded-2xl pointer-events-none" />
+        <div className="absolute inset-6 bg-linear-to-t from-background/60 to-transparent rounded-2xl pointer-events-none" />
       </div>
 
       {/* Content */}
@@ -51,7 +51,7 @@ function TalkDetailPage() {
           {talk.topics.map((topic) => (
             <span
               key={topic}
-              className="inline-flex items-center gap-1.5 px-3 py-1 text-sm font-medium tracking-wide uppercase bg-gold/15 text-gold border border-gold/30 rounded-full"
+              className="inline-flex items-center gap-1.5 px-3 py-1 text-sm font-medium tracking-wide uppercase bg-secondary/15 text-secondary border border-secondary/30 rounded-full"
             >
               <Tag className="w-3 h-3" />
               {topic}
@@ -60,7 +60,7 @@ function TalkDetailPage() {
         </div>
 
         {/* Title */}
-        <h1 className="font-display text-4xl md:text-5xl font-bold text-cream mb-6 leading-tight">
+        <h1 className="font-display text-4xl md:text-5xl font-bold text-foreground mb-6 leading-tight">
           {talk.title}
         </h1>
 
@@ -81,28 +81,28 @@ function TalkDetailPage() {
                 />
               </div>
               <div>
-                <p className="text-cream group-hover:text-gold transition-colors font-medium">
+                <p className="text-foreground group-hover:text-secondary transition-colors font-medium">
                   {talk.speaker}
                 </p>
-                <p className="text-cream/50 text-sm">{speaker.restaurant}</p>
+                <p className="text-muted-foreground text-sm">{speaker.restaurant}</p>
               </div>
             </Link>
           ) : (
-            <div className="flex items-center gap-2 text-cream/70">
-              <User className="w-5 h-5 text-copper" />
+            <div className="flex items-center gap-2 text-muted-foreground">
+              <User className="w-5 h-5 text-primary" />
               <span>{talk.speaker}</span>
             </div>
           )}
 
           {/* Duration */}
-          <div className="flex items-center gap-2 text-cream/60">
-            <Clock className="w-5 h-5 text-copper" />
+          <div className="flex items-center gap-2 text-muted-foreground">
+            <Clock className="w-5 h-5 text-primary" />
             <span className="text-lg">{talk.duration}</span>
           </div>
         </div>
 
         {/* Description content */}
-        <div className="prose prose-lg max-w-none prose-invert prose-p:text-cream/80 prose-headings:text-cream prose-headings:font-display prose-strong:text-cream prose-a:text-gold prose-li:text-cream/80 prose-ul:text-cream/80 font-body text-lg leading-relaxed pb-20">
+        <div className="prose prose-lg max-w-none dark:prose-invert prose-headings:text-foreground prose-headings:font-display prose-p:text-foreground prose-strong:text-foreground prose-a:text-secondary prose-li:text-foreground prose-ul:text-foreground font-body text-lg leading-relaxed pb-20">
           <div dangerouslySetInnerHTML={{ __html: marked(talk.content) }} />
         </div>
       </div>

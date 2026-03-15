@@ -16,7 +16,7 @@ export default function TalkCard({ talk, featured = false }: TalkCardProps) {
       <Card
         className={`relative overflow-hidden bg-card border-border/50 card-hover
           ${featured ? "aspect-16/10" : "aspect-video"}
-          hover:border-gold/50`}
+          hover:border-secondary/50`}
       >
         {/* Image */}
         <div className="absolute inset-0">
@@ -32,7 +32,7 @@ export default function TalkCard({ talk, featured = false }: TalkCardProps) {
               {talk.topics.slice(0, 2).map((topic) => (
                 <span
                   key={topic}
-                  className="px-2.5 py-0.5 text-xs font-medium tracking-wide uppercase bg-gold/15 text-gold border border-gold/30 rounded-full"
+                  className="px-2.5 py-0.5 text-xs font-medium tracking-wide uppercase bg-secondary/15 text-secondary border border-secondary/30 rounded-full"
                 >
                   {topic}
                 </span>
@@ -40,12 +40,12 @@ export default function TalkCard({ talk, featured = false }: TalkCardProps) {
             </div>
 
             {/* Title */}
-            <h3 className="font-display text-xl font-semibold text-cream group-hover:text-gold transition-colors leading-tight">
+            <h3 className="font-display text-xl font-semibold text-white group-hover:text-secondary transition-colors leading-tight">
               {talk.title}
             </h3>
 
             {/* Speaker & Duration */}
-            <div className="flex items-center gap-4 text-cream/60 text-sm">
+            <div className="flex items-center gap-4 text-white/60 text-sm">
               <div className="flex items-center gap-1.5">
                 <User className="w-3.5 h-3.5" />
                 <span>{talk.speaker}</span>
@@ -60,8 +60,8 @@ export default function TalkCard({ talk, featured = false }: TalkCardProps) {
 
         {/* Decorative accent */}
         <div className="absolute top-4 right-4">
-          <div className="w-8 h-8 rounded-full bg-gold/10 border border-gold/20 flex items-center justify-center">
-            <span className="text-gold/60 text-xs font-display">✦</span>
+          <div className="w-8 h-8 rounded-full bg-secondary/10 border border-secondary/20 flex items-center justify-center">
+            <span className="text-secondary/60 text-xs font-display">✦</span>
           </div>
         </div>
       </Card>

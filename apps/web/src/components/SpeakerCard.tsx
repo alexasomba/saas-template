@@ -16,7 +16,7 @@ export default function SpeakerCard({ speaker, featured = false }: SpeakerCardPr
       <Card
         className={`relative overflow-hidden bg-card border-border/50 card-hover
           ${featured ? "aspect-square" : "aspect-square"}
-          hover:border-copper/50`}
+          hover:border-primary/50`}
       >
         {/* Headshot */}
         <div className="absolute inset-0">
@@ -32,20 +32,20 @@ export default function SpeakerCard({ speaker, featured = false }: SpeakerCardPr
         <CardContent className="absolute bottom-0 left-0 right-0 p-6 z-10">
           <div className="space-y-2">
             {/* Specialty tag */}
-            <span className="inline-block px-3 py-1 text-xs font-medium tracking-wider uppercase bg-copper/20 text-copper-light rounded-full border border-copper/30">
+            <span className="inline-block px-3 py-1 text-xs font-medium tracking-wider uppercase bg-primary/20 text-primary border border-primary/30 rounded-full">
               {speaker.specialty}
             </span>
 
             {/* Name */}
-            <h3 className="font-display text-2xl font-semibold text-cream group-hover:text-gold transition-colors">
+            <h3 className="font-display text-2xl font-semibold text-white group-hover:text-secondary transition-colors">
               {speaker.name}
             </h3>
 
             {/* Title & Restaurant */}
-            <p className="text-cream/70 font-body text-lg">{speaker.title}</p>
+            <p className="text-white/70 font-body text-lg">{speaker.title}</p>
 
             {/* Location */}
-            <div className="flex items-center gap-2 text-cream/50 text-sm">
+            <div className="flex items-center gap-2 text-white/50 text-sm">
               <MapPin className="w-3.5 h-3.5" />
               <span>
                 {speaker.restaurant}, {speaker.location}

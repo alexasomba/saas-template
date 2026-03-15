@@ -76,6 +76,11 @@
       "sourceType": "github",
       "computedHash": "5655f09026204f4b753c9e06dc6483e9f6ddeec18bb3daa8735195c4b2d1f752"
     },
+    "shadcn": {
+      "source": "shadcn/ui",
+      "sourceType": "github",
+      "computedHash": "1ec42c9b918b315d8e5c6c856b78c3c4725fc93dea30b9b7e9975c69848fcce6"
+    },
     "upgrading-expo": {
       "source": "expo/skills",
       "sourceType": "github",

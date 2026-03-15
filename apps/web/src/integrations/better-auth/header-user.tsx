@@ -12,10 +12,14 @@ export default function BetterAuthHeader() {
     return (
       <div className="flex items-center gap-2">
         {session.user.image ? (
-          <img src={session.user.image} alt="" className="h-8 w-8 rounded-lg shadow-md" />
+          <img
+            src={session.user.image}
+            alt=""
+            className="h-8 w-8 rounded-lg shadow-md border border-border/50"
+          />
         ) : (
-          <div className="h-8 w-8 rounded-lg bg-white/5 border border-border/30 flex items-center justify-center">
-            <span className="text-[10px] font-bold text-copper">
+          <div className="h-8 w-8 rounded-lg bg-accent/30 border border-border/50 flex items-center justify-center">
+            <span className="text-[10px] font-bold text-primary">
               {session.user.name?.charAt(0).toUpperCase() || "U"}
             </span>
           </div>
@@ -24,7 +28,7 @@ export default function BetterAuthHeader() {
           onClick={() => {
             void authClient.signOut();
           }}
-          className="h-8 px-3 text-[10px] font-bold tracking-wider uppercase bg-white/5 text-cream/70 border border-border/30 rounded-lg hover:text-cream hover:bg-white/10 transition-all"
+          className="h-8 px-3 text-[10px] font-bold tracking-wider uppercase bg-accent/20 text-foreground border border-border/50 rounded-lg hover:bg-accent/40 hover:border-primary/30 transition-all"
         >
           Sign out
         </button>
@@ -35,7 +39,7 @@ export default function BetterAuthHeader() {
   return (
     <Link
       to="/demo/better-auth"
-      className="h-8 px-3 text-[10px] font-bold tracking-wider uppercase bg-white/5 text-cream/70 border border-border/30 rounded-lg hover:text-cream hover:bg-white/10 transition-all inline-flex items-center"
+      className="h-8 px-4 text-[10px] font-bold tracking-wider uppercase bg-primary text-primary-foreground rounded-lg shadow-lg shadow-primary/20 hover:shadow-primary/40 hover:-translate-y-0.5 transition-all inline-flex items-center"
     >
       Sign in
     </Link>

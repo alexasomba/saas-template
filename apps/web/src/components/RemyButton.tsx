@@ -5,7 +5,7 @@ export default function RemyButton() {
   return (
     <button
       onClick={() => showRemyAssistant.setState(() => true)}
-      className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-linear-to-r from-copper to-copper-dark text-charcoal hover:shadow-lg hover:shadow-copper/30 transition-all group"
+      className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-secondary text-secondary-foreground hover:shadow-lg hover:shadow-secondary/30 transition-all border border-secondary/20 group"
       aria-label="Open Remy Assistant"
     >
       <div className="relative">
