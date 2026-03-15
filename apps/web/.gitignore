@@ -58,3 +58,18 @@ dev-dist
 .dev.vars*
 
 .open-next
+
+
+node_modules
+dist
+dist-ssr
+
+
+.env
+.nitro
+.tanstack
+
+__unconfig*
+todos.json
+mcp-todos.json
+

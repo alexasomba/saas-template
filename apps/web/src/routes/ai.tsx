@@ -4,7 +4,7 @@ import { Button } from "@workspace/ui/components/button";
 import { Input } from "@workspace/ui/components/input";
 import { createFileRoute } from "@tanstack/react-router";
 import { DefaultChatTransport } from "ai";
-import { Send } from "lucide-react";
+import { PaperPlaneRight } from "@phosphor-icons/react";
 import { useRef, useEffect, useState, type FormEvent } from "react";
 import { Streamdown } from "streamdown";
 
@@ -82,7 +82,7 @@ function RouteComponent() {
           autoFocus
         />
         <Button type="submit" size="icon">
-          <Send size={18} />
+          <PaperPlaneRight size={18} />
         </Button>
       </form>
     </div>

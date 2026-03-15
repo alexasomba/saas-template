@@ -13,10 +13,10 @@ catalog:
   "@orpc/tanstack-query": "^1.13.7"
   "@orpc/zod": "^1.13.7"
   "@tanstack/react-form": "^1.28.5"
+  "@tanstack/react-query": "^5.90.21"
+  "@types/node": "^22.19.15"
   "@types/react": "^19.2.14"
   "@types/react-dom": "^19.2.3"
-  "@types/node": "^22.19.15"
-  "@tanstack/react-query": "^5.90.21"
   ai: "^6.0.127"
   alchemy: "^0.89.0"
   better-auth: 1.5.5
@@ -28,22 +28,22 @@ catalog:
   next-themes: "^0.4.6"
   react: "^19.2.4"
   react-dom: "^19.2.4"
-  sonner: "^2.0.5"
+  sonner: "^2.0.7"
   tailwindcss: "^4.2.1"
+  typescript: ^6.0.1-rc
   vite: npm:@voidzero-dev/vite-plus-core@latest
   vite-plus: ^0.1.11
   vitest: npm:@voidzero-dev/vite-plus-test@latest
   wrangler: "^4.73.0"
   zod: "^4.3.6"
-  typescript: ^6.0.1-rc
 overrides:
+  "@libsql/client": "catalog:"
+  "@tanstack/react-query": "catalog:"
+  "@types/node": "catalog:"
+  crossws: "catalog:"
+  typescript: "catalog:"
   vite: "catalog:"
   vitest: "catalog:"
-  crossws: "catalog:"
-  "@libsql/client": "catalog:"
-  typescript: "catalog:"
-  "@types/node": "catalog:"
-  "@tanstack/react-query": "catalog:"
 peerDependencyRules:
   allowAny:
     - vite

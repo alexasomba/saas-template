@@ -1,14 +1,20 @@
-import alchemy from "alchemy";
-import { TanStackStart } from "alchemy/cloudflare";
-import { Worker } from "alchemy/cloudflare";
-import { D1Database } from "alchemy/cloudflare";
+import { join, dirname } from "node:path";
+import { fileURLToPath } from "node:url";
 import { config } from "dotenv";
+import alchemy from "alchemy";
+import { TanStackStart, Worker, D1Database } from "alchemy/cloudflare";
 
-config({ path: ".env" });
-config({ path: "apps/web/.env" });
-config({ path: "apps/server/.env" });
+const __dirname = dirname(fileURLToPath(import.meta.url));
+const rootDir = join(__dirname, "../..");
 
-const app = await alchemy("my-better-t-app");
+config({ path: join(rootDir, ".env") });
+config({ path: join(rootDir, "apps/web/.env") });
+config({ path: join(rootDir, "apps/server/.env") });
+config({ path: join(rootDir, "packages/infra/.env") });
+
+const app = await alchemy("my-better-t-app", {
+  password: process.env.ALCHEMY_PASSWORD,
+});
 
 const db = await D1Database("database", {
   migrationsDir: "packages/db/src/migrations",

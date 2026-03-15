@@ -14,6 +14,7 @@
     "zod": "catalog:"
   },
   "devDependencies": {
+    "@cloudflare/workers-types": "catalog:",
     "@types/node": "catalog:",
     "@workspace/config": "workspace:*",
     "@workspace/infra": "workspace:*",
