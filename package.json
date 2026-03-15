@@ -11,6 +11,7 @@
     "build:desktop": "vp run --filter desktop build:stable",
     "build:desktop:canary": "vp run --filter desktop build:canary",
     "dev:server": "vp run --filter server dev",
+    "auth:generate": "vp run --filter auth better-auth:generate",
     "check": "vp check --fix"
   },
   "dependencies": {
@@ -22,7 +23,7 @@
     "@cloudflare/workers-types": "catalog:",
     "@types/node": "^22.19.15",
     "@workspace/config": "workspace:*",
-    "typescript": "6.0.1-rc",
+    "typescript": "~5.9.3",
     "vite-plus": "catalog:"
   },
   "engines": {

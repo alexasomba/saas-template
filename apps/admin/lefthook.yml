@@ -1,0 +1,17 @@
+# Lefthook configuration
+# Refer to https://github.com/evilmartians/lefthook/blob/master/docs/configuration.md
+
+pre-commit:
+  parallel: false
+  commands:
+    lint:
+      glob: "*.{js,ts,jsx,tsx}"
+      run: pnpm exec lint-staged
+    type-check:
+      glob: "*.{ts,tsx}"
+      run: pnpm run generate:types && pnpm exec tsc --noEmit
+    test-int:
+      glob: "src/**/*.{ts,tsx,js,jsx}"
+      run: pnpm run test:int
+    build:
+      run: pnpm run build

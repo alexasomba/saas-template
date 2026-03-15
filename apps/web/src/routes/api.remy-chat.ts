@@ -26,7 +26,11 @@ export const Route = createFileRoute("/api/remy-chat")({
         const abortController = new AbortController();
 
         try {
-          const body = await request.json();
+          const body = (await request.json()) as {
+            messages: any[];
+            speakerSlug?: string;
+            talkSlug?: string;
+          };
           const { messages, speakerSlug, talkSlug } = body;
 
           const SYSTEM_PROMPT = `You are Remy, a charming and knowledgeable culinary assistant for the Haute Pâtisserie 2026 conference in Paris. You have a warm, enthusiastic personality and deep appreciation for the art of pastry and baking.

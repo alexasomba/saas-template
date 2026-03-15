@@ -1,0 +1,15 @@
+@import "~@payloadcms/ui/scss";
+
+.analytics-widget-grid {
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  gap: base(1);
+
+  @media (min-width: 768px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media (min-width: 1024px) {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}

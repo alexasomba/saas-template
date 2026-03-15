@@ -39,7 +39,7 @@ export const Route = createFileRoute("/demo/api/ai/structured")({
   server: {
     handlers: {
       POST: async ({ request }) => {
-        const body = await request.json();
+        const body = (await request.json()) as any;
         const { recipeName, mode = "structured" } = body;
 
         if (!recipeName || recipeName.trim().length === 0) {

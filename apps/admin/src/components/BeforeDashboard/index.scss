@@ -1,0 +1,36 @@
+@import "~@payloadcms/ui/scss";
+
+.dashboard .before-dashboard {
+  margin-bottom: base(1.5);
+
+  &__banner {
+    margin-bottom: base(1);
+    & h4 {
+      margin: 0;
+    }
+  }
+
+  &__intro {
+    background: var(--theme-elevation-50);
+    border: 1px solid var(--theme-elevation-150);
+    border-radius: 4px;
+    padding: base(1);
+    font-size: 0.85rem;
+    color: var(--theme-elevation-600);
+  }
+
+  &__instructions {
+    list-style: decimal;
+    margin-top: base(0.5);
+    margin-bottom: base(0.5);
+    padding-left: base(1.25);
+
+    & li {
+      width: 100%;
+    }
+  }
+
+  & a:hover {
+    opacity: 0.85;
+  }
+}

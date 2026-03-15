@@ -1,9 +1,10 @@
-import { betterAuth } from "better-auth";
+import { auth, setAuth } from "@workspace/auth";
+import { db } from "@workspace/db";
 import { tanstackStartCookies } from "better-auth/tanstack-start";
 
-export const auth = betterAuth({
-  emailAndPassword: {
-    enabled: true,
-  },
+setAuth({
+  db,
   plugins: [tanstackStartCookies()],
 });
+
+export { auth };

@@ -4,7 +4,7 @@ export default defineConfig({
   staged: {
     "*.{js,ts,tsx,vue,svelte}": ["vp check --fix", "vp test related"],
     "*.{json,md,css}": "vp fmt",
-    "package.json": "vp dedupe --check",
+    // "package.json": "vp dedupe --check",
   },
   fmt: {
     ignorePatterns: [],

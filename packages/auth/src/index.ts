@@ -1,47 +1,51 @@
-import { expo } from "@better-auth/expo";
-import { db } from "@workspace/db";
+import type { db as dbType } from "@workspace/db";
 import * as schema from "@workspace/db/schema/auth";
-import { env } from "@workspace/env/server";
-import { betterAuth } from "better-auth";
+import { betterAuth, type BetterAuthOptions } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
+import { getAuthOptions } from "./options";
 
-export const auth = betterAuth({
-  database: drizzleAdapter(db, {
-    provider: "sqlite",
+let authInstance: any;
 
-    schema: schema,
-  }),
-  trustedOrigins: [
-    env.CORS_ORIGIN,
-    "my-better-t-app://",
-    ...(env.NODE_ENV === "development"
-      ? ["exp://", "exp://**", "exp://192.168.*.*:*/**", "http://localhost:8081"]
-      : []),
-  ],
-  emailAndPassword: {
-    enabled: true,
+export type AuthConfig = Omit<BetterAuthOptions, "database"> & {
+  db: typeof dbType;
+};
+
+export function setAuth(config: AuthConfig) {
+  const { db, ...rest } = config;
+
+  const options = getAuthOptions(
+    drizzleAdapter(db, {
+      provider: "sqlite",
+      schema: {
+        auth_user: schema.auth_user,
+        auth_session: schema.auth_session,
+        auth_account: schema.auth_account,
+        auth_verification: schema.auth_verification,
+      },
+    }),
+  );
+
+  authInstance = betterAuth({
+    ...options,
+    ...rest,
+    plugins: [...(options.plugins || []), ...(rest.plugins || [])],
+  });
+
+  return authInstance;
+}
+
+export function getAuth() {
+  if (!authInstance) {
+    throw new Error("Auth not initialized. Call setAuth() first.");
+  }
+  return authInstance;
+}
+
+export const auth = {
+  get handler() {
+    return getAuth().handler;
   },
-  // uncomment cookieCache setting when ready to deploy to Cloudflare using *.workers.dev domains
-  // session: {
-  //   cookieCache: {
-  //     enabled: true,
-  //     maxAge: 60,
-  //   },
-  // },
-  secret: env.BETTER_AUTH_SECRET,
-  baseURL: env.BETTER_AUTH_URL,
-  advanced: {
-    defaultCookieAttributes: {
-      sameSite: "none",
-      secure: true,
-      httpOnly: true,
-    },
-    // uncomment crossSubDomainCookies setting when ready to deploy and replace <your-workers-subdomain> with your actual workers subdomain
-    // https://developers.cloudflare.com/workers/wrangler/configuration/#workersdev
-    // crossSubDomainCookies: {
-    //   enabled: true,
-    //   domain: "<your-workers-subdomain>",
-    // },
+  get api() {
+    return getAuth().api;
   },
-  plugins: [expo()],
-});
+};

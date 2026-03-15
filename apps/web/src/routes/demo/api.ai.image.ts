@@ -6,7 +6,7 @@ export const Route = createFileRoute("/demo/api/ai/image")({
   server: {
     handlers: {
       POST: async ({ request }) => {
-        const body = await request.json();
+        const body = (await request.json()) as any;
         const { prompt, numberOfImages = 1, size = "1024x1024" } = body;
 
         if (!prompt || prompt.trim().length === 0) {

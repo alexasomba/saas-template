@@ -1,0 +1,9 @@
+# *
+User-agent: *
+Disallow: /admin/*
+
+# Host
+Host: http://localhost:8787
+
+# Sitemaps
+Sitemap: http://localhost:8787/sitemap.xml

@@ -1,0 +1,814 @@
+import { MigrateUpArgs, MigrateDownArgs, sql } from "@payloadcms/db-d1-sqlite";
+
+export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
+  await db.run(sql`CREATE TABLE \`subscriptions\` (
+  	\`id\` integer PRIMARY KEY NOT NULL,
+  	\`status\` text DEFAULT 'active' NOT NULL,
+  	\`customer_id\` integer NOT NULL,
+  	\`product_id\` integer NOT NULL,
+  	\`variant_id\` integer,
+  	\`order_id\` integer NOT NULL,
+  	\`period\` text NOT NULL,
+  	\`interval\` numeric NOT NULL,
+  	\`next_payment_date\` text,
+  	\`end_date\` text,
+  	\`trial_end_date\` text,
+  	\`subscription_price\` numeric NOT NULL,
+  	\`subscription_price_n_g_n\` numeric NOT NULL,
+  	\`currency\` text NOT NULL,
+  	\`paystack_auth_code\` text,
+  	\`paystack_customer_code\` text,
+  	\`paystack_email\` text,
+  	\`failed_payment_count\` numeric DEFAULT 0,
+  	\`last_failed_at\` text,
+  	\`updated_at\` text DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ', 'now')) NOT NULL,
+  	\`created_at\` text DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ', 'now')) NOT NULL,
+  	FOREIGN KEY (\`customer_id\`) REFERENCES \`users\`(\`id\`) ON UPDATE no action ON DELETE set null,
+  	FOREIGN KEY (\`product_id\`) REFERENCES \`products\`(\`id\`) ON UPDATE no action ON DELETE set null,
+  	FOREIGN KEY (\`variant_id\`) REFERENCES \`variants\`(\`id\`) ON UPDATE no action ON DELETE set null,
+  	FOREIGN KEY (\`order_id\`) REFERENCES \`orders\`(\`id\`) ON UPDATE no action ON DELETE set null
+  );
+  `);
+  await db.run(
+    sql`CREATE INDEX \`subscriptions_customer_idx\` ON \`subscriptions\` (\`customer_id\`);`,
+  );
+  await db.run(
+    sql`CREATE INDEX \`subscriptions_product_idx\` ON \`subscriptions\` (\`product_id\`);`,
+  );
+  await db.run(
+    sql`CREATE INDEX \`subscriptions_variant_idx\` ON \`subscriptions\` (\`variant_id\`);`,
+  );
+  await db.run(sql`CREATE INDEX \`subscriptions_order_idx\` ON \`subscriptions\` (\`order_id\`);`);
+  await db.run(
+    sql`CREATE INDEX \`subscriptions_updated_at_idx\` ON \`subscriptions\` (\`updated_at\`);`,
+  );
+  await db.run(
+    sql`CREATE INDEX \`subscriptions_created_at_idx\` ON \`subscriptions\` (\`created_at\`);`,
+  );
+  await db.run(sql`CREATE TABLE \`subscriptions_rels\` (
+  	\`id\` integer PRIMARY KEY NOT NULL,
+  	\`order\` integer,
+  	\`parent_id\` integer NOT NULL,
+  	\`path\` text NOT NULL,
+  	\`orders_id\` integer,
+  	FOREIGN KEY (\`parent_id\`) REFERENCES \`subscriptions\`(\`id\`) ON UPDATE no action ON DELETE cascade,
+  	FOREIGN KEY (\`orders_id\`) REFERENCES \`orders\`(\`id\`) ON UPDATE no action ON DELETE cascade
+  );
+  `);
+  await db.run(
+    sql`CREATE INDEX \`subscriptions_rels_order_idx\` ON \`subscriptions_rels\` (\`order\`);`,
+  );
+  await db.run(
+    sql`CREATE INDEX \`subscriptions_rels_parent_idx\` ON \`subscriptions_rels\` (\`parent_id\`);`,
+  );
+  await db.run(
+    sql`CREATE INDEX \`subscriptions_rels_path_idx\` ON \`subscriptions_rels\` (\`path\`);`,
+  );
+  await db.run(
+    sql`CREATE INDEX \`subscriptions_rels_orders_id_idx\` ON \`subscriptions_rels\` (\`orders_id\`);`,
+  );
+  await db.run(sql`CREATE TABLE \`products_blocks_multiple_choice_options\` (
+  	\`_order\` integer NOT NULL,
+  	\`_parent_id\` text NOT NULL,
+  	\`id\` text PRIMARY KEY NOT NULL,
+  	\`label\` text,
+  	\`price_type\` text DEFAULT 'flat',
+  	\`price\` numeric DEFAULT 0,
+  	\`hidden\` integer DEFAULT false,
+  	\`image_id\` integer,
+  	FOREIGN KEY (\`image_id\`) REFERENCES \`media\`(\`id\`) ON UPDATE no action ON DELETE set null,
+  	FOREIGN KEY (\`_parent_id\`) REFERENCES \`products_blocks_multiple_choice\`(\`id\`) ON UPDATE no action ON DELETE cascade
+  );
+  `);
+  await db.run(
+    sql`CREATE INDEX \`products_blocks_multiple_choice_options_order_idx\` ON \`products_blocks_multiple_choice_options\` (\`_order\`);`,
+  );
+  await db.run(
+    sql`CREATE INDEX \`products_blocks_multiple_choice_options_parent_id_idx\` ON \`products_blocks_multiple_choice_options\` (\`_parent_id\`);`,
+  );
+  await db.run(
+    sql`CREATE INDEX \`products_blocks_multiple_choice_options_image_idx\` ON \`products_blocks_multiple_choice_options\` (\`image_id\`);`,
+  );
+  await db.run(sql`CREATE TABLE \`products_blocks_multiple_choice\` (
+  	\`_order\` integer NOT NULL,
+  	\`_parent_id\` integer NOT NULL,
+  	\`_path\` text NOT NULL,
+  	\`id\` text PRIMARY KEY NOT NULL,
+  	\`label\` text,
+  	\`description\` text,
+  	\`required\` integer DEFAULT false,
+  	\`display_as\` text DEFAULT 'dropdown',
+  	\`default_option\` text,
+  	\`block_name\` text,
+  	FOREIGN KEY (\`_parent_id\`) REFERENCES \`products\`(\`id\`) ON UPDATE no action ON DELETE cascade
+  );
+  `);
+  await db.run(
+    sql`CREATE INDEX \`products_blocks_multiple_choice_order_idx\` ON \`products_blocks_multiple_choice\` (\`_order\`);`,
+  );
+  await db.run(
+    sql`CREATE INDEX \`products_blocks_multiple_choice_parent_id_idx\` ON \`products_blocks_multiple_choice\` (\`_parent_id\`);`,
+  );
+  await db.run(
+    sql`CREATE INDEX \`products_blocks_multiple_choice_path_idx\` ON \`products_blocks_multiple_choice\` (\`_path\`);`,
+  );
+  await db.run(sql`CREATE TABLE \`products_blocks_checkboxes_options\` (
+  	\`_order\` integer NOT NULL,
+  	\`_parent_id\` text NOT NULL,
+  	\`id\` text PRIMARY KEY NOT NULL,
+  	\`label\` text,
+  	\`price_type\` text DEFAULT 'flat',
+  	\`price\` numeric DEFAULT 0,
+  	\`default_checked\` integer DEFAULT false,
+  	\`hidden\` integer DEFAULT false,
+  	FOREIGN KEY (\`_parent_id\`) REFERENCES \`products_blocks_checkboxes\`(\`id\`) ON UPDATE no action ON DELETE cascade
+  );
+  `);
+  await db.run(
+    sql`CREATE INDEX \`products_blocks_checkboxes_options_order_idx\` ON \`products_blocks_checkboxes_options\` (\`_order\`);`,
+  );
+  await db.run(
+    sql`CREATE INDEX \`products_blocks_checkboxes_options_parent_id_idx\` ON \`products_blocks_checkboxes_options\` (\`_parent_id\`);`,
+  );
+  await db.run(sql`CREATE TABLE \`products_blocks_checkboxes\` (
+  	\`_order\` integer NOT NULL,
+  	\`_parent_id\` integer NOT NULL,
+  	\`_path\` text NOT NULL,
+  	\`id\` text PRIMARY KEY NOT NULL,
+  	\`label\` text,
+  	\`description\` text,
+  	\`required\` integer DEFAULT false,
+  	\`block_name\` text,
+  	FOREIGN KEY (\`_parent_id\`) REFERENCES \`products\`(\`id\`) ON UPDATE no action ON DELETE cascade
+  );
+  `);
+  await db.run(
+    sql`CREATE INDEX \`products_blocks_checkboxes_order_idx\` ON \`products_blocks_checkboxes\` (\`_order\`);`,
+  );
+  await db.run(
+    sql`CREATE INDEX \`products_blocks_checkboxes_parent_id_idx\` ON \`products_blocks_checkboxes\` (\`_parent_id\`);`,
+  );
+  await db.run(
+    sql`CREATE INDEX \`products_blocks_checkboxes_path_idx\` ON \`products_blocks_checkboxes\` (\`_path\`);`,
+  );
+  await db.run(sql`CREATE TABLE \`products_blocks_short_text\` (
+  	\`_order\` integer NOT NULL,
+  	\`_parent_id\` integer NOT NULL,
+  	\`_path\` text NOT NULL,
+  	\`id\` text PRIMARY KEY NOT NULL,
+  	\`label\` text,
+  	\`description\` text,
+  	\`required\` integer DEFAULT false,
+  	\`restriction\` text DEFAULT 'any',
+  	\`placeholder\` text,
+  	\`max_length\` numeric,
+  	\`price_type\` text DEFAULT 'flat',
+  	\`price\` numeric DEFAULT 0,
+  	\`block_name\` text,
+  	FOREIGN KEY (\`_parent_id\`) REFERENCES \`products\`(\`id\`) ON UPDATE no action ON DELETE cascade
+  );
+  `);
+  await db.run(
+    sql`CREATE INDEX \`products_blocks_short_text_order_idx\` ON \`products_blocks_short_text\` (\`_order\`);`,
+  );
+  await db.run(
+    sql`CREATE INDEX \`products_blocks_short_text_parent_id_idx\` ON \`products_blocks_short_text\` (\`_parent_id\`);`,
+  );
+  await db.run(
+    sql`CREATE INDEX \`products_blocks_short_text_path_idx\` ON \`products_blocks_short_text\` (\`_path\`);`,
+  );
+  await db.run(sql`CREATE TABLE \`products_blocks_long_text\` (
+  	\`_order\` integer NOT NULL,
+  	\`_parent_id\` integer NOT NULL,
+  	\`_path\` text NOT NULL,
+  	\`id\` text PRIMARY KEY NOT NULL,
+  	\`label\` text,
+  	\`description\` text,
+  	\`required\` integer DEFAULT false,
+  	\`placeholder\` text,
+  	\`max_length\` numeric,
+  	\`price_type\` text DEFAULT 'flat',
+  	\`price\` numeric DEFAULT 0,
+  	\`block_name\` text,
+  	FOREIGN KEY (\`_parent_id\`) REFERENCES \`products\`(\`id\`) ON UPDATE no action ON DELETE cascade
+  );
+  `);
+  await db.run(
+    sql`CREATE INDEX \`products_blocks_long_text_order_idx\` ON \`products_blocks_long_text\` (\`_order\`);`,
+  );
+  await db.run(
+    sql`CREATE INDEX \`products_blocks_long_text_parent_id_idx\` ON \`products_blocks_long_text\` (\`_parent_id\`);`,
+  );
+  await db.run(
+    sql`CREATE INDEX \`products_blocks_long_text_path_idx\` ON \`products_blocks_long_text\` (\`_path\`);`,
+  );
+  await db.run(sql`CREATE TABLE \`products_blocks_file_upload\` (
+  	\`_order\` integer NOT NULL,
+  	\`_parent_id\` integer NOT NULL,
+  	\`_path\` text NOT NULL,
+  	\`id\` text PRIMARY KEY NOT NULL,
+  	\`label\` text,
+  	\`description\` text,
+  	\`required\` integer DEFAULT false,
+  	\`price_type\` text DEFAULT 'flat',
+  	\`price\` numeric DEFAULT 0,
+  	\`block_name\` text,
+  	FOREIGN KEY (\`_parent_id\`) REFERENCES \`products\`(\`id\`) ON UPDATE no action ON DELETE cascade
+  );
+  `);
+  await db.run(
+    sql`CREATE INDEX \`products_blocks_file_upload_order_idx\` ON \`products_blocks_file_upload\` (\`_order\`);`,
+  );
+  await db.run(
+    sql`CREATE INDEX \`products_blocks_file_upload_parent_id_idx\` ON \`products_blocks_file_upload\` (\`_parent_id\`);`,
+  );
+  await db.run(
+    sql`CREATE INDEX \`products_blocks_file_upload_path_idx\` ON \`products_blocks_file_upload\` (\`_path\`);`,
+  );
+  await db.run(sql`CREATE TABLE \`products_blocks_customer_price\` (
+  	\`_order\` integer NOT NULL,
+  	\`_parent_id\` integer NOT NULL,
+  	\`_path\` text NOT NULL,
+  	\`id\` text PRIMARY KEY NOT NULL,
+  	\`label\` text,
+  	\`description\` text,
+  	\`required\` integer DEFAULT false,
+  	\`prefilled_price\` numeric,
+  	\`min_price\` numeric,
+  	\`max_price\` numeric,
+  	\`block_name\` text,
+  	FOREIGN KEY (\`_parent_id\`) REFERENCES \`products\`(\`id\`) ON UPDATE no action ON DELETE cascade
+  );
+  `);
+  await db.run(
+    sql`CREATE INDEX \`products_blocks_customer_price_order_idx\` ON \`products_blocks_customer_price\` (\`_order\`);`,
+  );
+  await db.run(
+    sql`CREATE INDEX \`products_blocks_customer_price_parent_id_idx\` ON \`products_blocks_customer_price\` (\`_parent_id\`);`,
+  );
+  await db.run(
+    sql`CREATE INDEX \`products_blocks_customer_price_path_idx\` ON \`products_blocks_customer_price\` (\`_path\`);`,
+  );
+  await db.run(sql`CREATE TABLE \`products_blocks_quantity\` (
+  	\`_order\` integer NOT NULL,
+  	\`_parent_id\` integer NOT NULL,
+  	\`_path\` text NOT NULL,
+  	\`id\` text PRIMARY KEY NOT NULL,
+  	\`label\` text,
+  	\`description\` text,
+  	\`required\` integer DEFAULT false,
+  	\`prefilled_quantity\` numeric,
+  	\`min_quantity\` numeric,
+  	\`max_quantity\` numeric,
+  	\`price_type\` text DEFAULT 'flat',
+  	\`price\` numeric DEFAULT 0,
+  	\`block_name\` text,
+  	FOREIGN KEY (\`_parent_id\`) REFERENCES \`products\`(\`id\`) ON UPDATE no action ON DELETE cascade
+  );
+  `);
+  await db.run(
+    sql`CREATE INDEX \`products_blocks_quantity_order_idx\` ON \`products_blocks_quantity\` (\`_order\`);`,
+  );
+  await db.run(
+    sql`CREATE INDEX \`products_blocks_quantity_parent_id_idx\` ON \`products_blocks_quantity\` (\`_parent_id\`);`,
+  );
+  await db.run(
+    sql`CREATE INDEX \`products_blocks_quantity_path_idx\` ON \`products_blocks_quantity\` (\`_path\`);`,
+  );
+  await db.run(sql`CREATE TABLE \`products_blocks_date_picker\` (
+  	\`_order\` integer NOT NULL,
+  	\`_parent_id\` integer NOT NULL,
+  	\`_path\` text NOT NULL,
+  	\`id\` text PRIMARY KEY NOT NULL,
+  	\`label\` text,
+  	\`description\` text,
+  	\`required\` integer DEFAULT false,
+  	\`price_type\` text DEFAULT 'flat',
+  	\`price\` numeric DEFAULT 0,
+  	\`block_name\` text,
+  	FOREIGN KEY (\`_parent_id\`) REFERENCES \`products\`(\`id\`) ON UPDATE no action ON DELETE cascade
+  );
+  `);
+  await db.run(
+    sql`CREATE INDEX \`products_blocks_date_picker_order_idx\` ON \`products_blocks_date_picker\` (\`_order\`);`,
+  );
+  await db.run(
+    sql`CREATE INDEX \`products_blocks_date_picker_parent_id_idx\` ON \`products_blocks_date_picker\` (\`_parent_id\`);`,
+  );
+  await db.run(
+    sql`CREATE INDEX \`products_blocks_date_picker_path_idx\` ON \`products_blocks_date_picker\` (\`_path\`);`,
+  );
+  await db.run(sql`CREATE TABLE \`_products_v_blocks_multiple_choice_options\` (
+  	\`_order\` integer NOT NULL,
+  	\`_parent_id\` integer NOT NULL,
+  	\`id\` integer PRIMARY KEY NOT NULL,
+  	\`label\` text,
+  	\`price_type\` text DEFAULT 'flat',
+  	\`price\` numeric DEFAULT 0,
+  	\`hidden\` integer DEFAULT false,
+  	\`image_id\` integer,
+  	\`_uuid\` text,
+  	FOREIGN KEY (\`image_id\`) REFERENCES \`media\`(\`id\`) ON UPDATE no action ON DELETE set null,
+  	FOREIGN KEY (\`_parent_id\`) REFERENCES \`_products_v_blocks_multiple_choice\`(\`id\`) ON UPDATE no action ON DELETE cascade
+  );
+  `);
+  await db.run(
+    sql`CREATE INDEX \`_products_v_blocks_multiple_choice_options_order_idx\` ON \`_products_v_blocks_multiple_choice_options\` (\`_order\`);`,
+  );
+  await db.run(
+    sql`CREATE INDEX \`_products_v_blocks_multiple_choice_options_parent_id_idx\` ON \`_products_v_blocks_multiple_choice_options\` (\`_parent_id\`);`,
+  );
+  await db.run(
+    sql`CREATE INDEX \`_products_v_blocks_multiple_choice_options_image_idx\` ON \`_products_v_blocks_multiple_choice_options\` (\`image_id\`);`,
+  );
+  await db.run(sql`CREATE TABLE \`_products_v_blocks_multiple_choice\` (
+  	\`_order\` integer NOT NULL,
+  	\`_parent_id\` integer NOT NULL,
+  	\`_path\` text NOT NULL,
+  	\`id\` integer PRIMARY KEY NOT NULL,
+  	\`label\` text,
+  	\`description\` text,
+  	\`required\` integer DEFAULT false,
+  	\`display_as\` text DEFAULT 'dropdown',
+  	\`default_option\` text,
+  	\`_uuid\` text,
+  	\`block_name\` text,
+  	FOREIGN KEY (\`_parent_id\`) REFERENCES \`_products_v\`(\`id\`) ON UPDATE no action ON DELETE cascade
+  );
+  `);
+  await db.run(
+    sql`CREATE INDEX \`_products_v_blocks_multiple_choice_order_idx\` ON \`_products_v_blocks_multiple_choice\` (\`_order\`);`,
+  );
+  await db.run(
+    sql`CREATE INDEX \`_products_v_blocks_multiple_choice_parent_id_idx\` ON \`_products_v_blocks_multiple_choice\` (\`_parent_id\`);`,
+  );
+  await db.run(
+    sql`CREATE INDEX \`_products_v_blocks_multiple_choice_path_idx\` ON \`_products_v_blocks_multiple_choice\` (\`_path\`);`,
+  );
+  await db.run(sql`CREATE TABLE \`_products_v_blocks_checkboxes_options\` (
+  	\`_order\` integer NOT NULL,
+  	\`_parent_id\` integer NOT NULL,
+  	\`id\` integer PRIMARY KEY NOT NULL,
+  	\`label\` text,
+  	\`price_type\` text DEFAULT 'flat',
+  	\`price\` numeric DEFAULT 0,
+  	\`default_checked\` integer DEFAULT false,
+  	\`hidden\` integer DEFAULT false,
+  	\`_uuid\` text,
+  	FOREIGN KEY (\`_parent_id\`) REFERENCES \`_products_v_blocks_checkboxes\`(\`id\`) ON UPDATE no action ON DELETE cascade
+  );
+  `);
+  await db.run(
+    sql`CREATE INDEX \`_products_v_blocks_checkboxes_options_order_idx\` ON \`_products_v_blocks_checkboxes_options\` (\`_order\`);`,
+  );
+  await db.run(
+    sql`CREATE INDEX \`_products_v_blocks_checkboxes_options_parent_id_idx\` ON \`_products_v_blocks_checkboxes_options\` (\`_parent_id\`);`,
+  );
+  await db.run(sql`CREATE TABLE \`_products_v_blocks_checkboxes\` (
+  	\`_order\` integer NOT NULL,
+  	\`_parent_id\` integer NOT NULL,
+  	\`_path\` text NOT NULL,
+  	\`id\` integer PRIMARY KEY NOT NULL,
+  	\`label\` text,
+  	\`description\` text,
+  	\`required\` integer DEFAULT false,
+  	\`_uuid\` text,
+  	\`block_name\` text,
+  	FOREIGN KEY (\`_parent_id\`) REFERENCES \`_products_v\`(\`id\`) ON UPDATE no action ON DELETE cascade
+  );
+  `);
+  await db.run(
+    sql`CREATE INDEX \`_products_v_blocks_checkboxes_order_idx\` ON \`_products_v_blocks_checkboxes\` (\`_order\`);`,
+  );
+  await db.run(
+    sql`CREATE INDEX \`_products_v_blocks_checkboxes_parent_id_idx\` ON \`_products_v_blocks_checkboxes\` (\`_parent_id\`);`,
+  );
+  await db.run(
+    sql`CREATE INDEX \`_products_v_blocks_checkboxes_path_idx\` ON \`_products_v_blocks_checkboxes\` (\`_path\`);`,
+  );
+  await db.run(sql`CREATE TABLE \`_products_v_blocks_short_text\` (
+  	\`_order\` integer NOT NULL,
+  	\`_parent_id\` integer NOT NULL,
+  	\`_path\` text NOT NULL,
+  	\`id\` integer PRIMARY KEY NOT NULL,
+  	\`label\` text,
+  	\`description\` text,
+  	\`required\` integer DEFAULT false,
+  	\`restriction\` text DEFAULT 'any',
+  	\`placeholder\` text,
+  	\`max_length\` numeric,
+  	\`price_type\` text DEFAULT 'flat',
+  	\`price\` numeric DEFAULT 0,
+  	\`_uuid\` text,
+  	\`block_name\` text,
+  	FOREIGN KEY (\`_parent_id\`) REFERENCES \`_products_v\`(\`id\`) ON UPDATE no action ON DELETE cascade
+  );
+  `);
+  await db.run(
+    sql`CREATE INDEX \`_products_v_blocks_short_text_order_idx\` ON \`_products_v_blocks_short_text\` (\`_order\`);`,
+  );
+  await db.run(
+    sql`CREATE INDEX \`_products_v_blocks_short_text_parent_id_idx\` ON \`_products_v_blocks_short_text\` (\`_parent_id\`);`,
+  );
+  await db.run(
+    sql`CREATE INDEX \`_products_v_blocks_short_text_path_idx\` ON \`_products_v_blocks_short_text\` (\`_path\`);`,
+  );
+  await db.run(sql`CREATE TABLE \`_products_v_blocks_long_text\` (
+  	\`_order\` integer NOT NULL,
+  	\`_parent_id\` integer NOT NULL,
+  	\`_path\` text NOT NULL,
+  	\`id\` integer PRIMARY KEY NOT NULL,
+  	\`label\` text,
+  	\`description\` text,
+  	\`required\` integer DEFAULT false,
+  	\`placeholder\` text,
+  	\`max_length\` numeric,
+  	\`price_type\` text DEFAULT 'flat',
+  	\`price\` numeric DEFAULT 0,
+  	\`_uuid\` text,
+  	\`block_name\` text,
+  	FOREIGN KEY (\`_parent_id\`) REFERENCES \`_products_v\`(\`id\`) ON UPDATE no action ON DELETE cascade
+  );
+  `);
+  await db.run(
+    sql`CREATE INDEX \`_products_v_blocks_long_text_order_idx\` ON \`_products_v_blocks_long_text\` (\`_order\`);`,
+  );
+  await db.run(
+    sql`CREATE INDEX \`_products_v_blocks_long_text_parent_id_idx\` ON \`_products_v_blocks_long_text\` (\`_parent_id\`);`,
+  );
+  await db.run(
+    sql`CREATE INDEX \`_products_v_blocks_long_text_path_idx\` ON \`_products_v_blocks_long_text\` (\`_path\`);`,
+  );
+  await db.run(sql`CREATE TABLE \`_products_v_blocks_file_upload\` (
+  	\`_order\` integer NOT NULL,
+  	\`_parent_id\` integer NOT NULL,
+  	\`_path\` text NOT NULL,
+  	\`id\` integer PRIMARY KEY NOT NULL,
+  	\`label\` text,
+  	\`description\` text,
+  	\`required\` integer DEFAULT false,
+  	\`price_type\` text DEFAULT 'flat',
+  	\`price\` numeric DEFAULT 0,
+  	\`_uuid\` text,
+  	\`block_name\` text,
+  	FOREIGN KEY (\`_parent_id\`) REFERENCES \`_products_v\`(\`id\`) ON UPDATE no action ON DELETE cascade
+  );
+  `);
+  await db.run(
+    sql`CREATE INDEX \`_products_v_blocks_file_upload_order_idx\` ON \`_products_v_blocks_file_upload\` (\`_order\`);`,
+  );
+  await db.run(
+    sql`CREATE INDEX \`_products_v_blocks_file_upload_parent_id_idx\` ON \`_products_v_blocks_file_upload\` (\`_parent_id\`);`,
+  );
+  await db.run(
+    sql`CREATE INDEX \`_products_v_blocks_file_upload_path_idx\` ON \`_products_v_blocks_file_upload\` (\`_path\`);`,
+  );
+  await db.run(sql`CREATE TABLE \`_products_v_blocks_customer_price\` (
+  	\`_order\` integer NOT NULL,
+  	\`_parent_id\` integer NOT NULL,
+  	\`_path\` text NOT NULL,
+  	\`id\` integer PRIMARY KEY NOT NULL,
+  	\`label\` text,
+  	\`description\` text,
+  	\`required\` integer DEFAULT false,
+  	\`prefilled_price\` numeric,
+  	\`min_price\` numeric,
+  	\`max_price\` numeric,
+  	\`_uuid\` text,
+  	\`block_name\` text,
+  	FOREIGN KEY (\`_parent_id\`) REFERENCES \`_products_v\`(\`id\`) ON UPDATE no action ON DELETE cascade
+  );
+  `);
+  await db.run(
+    sql`CREATE INDEX \`_products_v_blocks_customer_price_order_idx\` ON \`_products_v_blocks_customer_price\` (\`_order\`);`,
+  );
+  await db.run(
+    sql`CREATE INDEX \`_products_v_blocks_customer_price_parent_id_idx\` ON \`_products_v_blocks_customer_price\` (\`_parent_id\`);`,
+  );
+  await db.run(
+    sql`CREATE INDEX \`_products_v_blocks_customer_price_path_idx\` ON \`_products_v_blocks_customer_price\` (\`_path\`);`,
+  );
+  await db.run(sql`CREATE TABLE \`_products_v_blocks_quantity\` (
+  	\`_order\` integer NOT NULL,
+  	\`_parent_id\` integer NOT NULL,
+  	\`_path\` text NOT NULL,
+  	\`id\` integer PRIMARY KEY NOT NULL,
+  	\`label\` text,
+  	\`description\` text,
+  	\`required\` integer DEFAULT false,
+  	\`prefilled_quantity\` numeric,
+  	\`min_quantity\` numeric,
+  	\`max_quantity\` numeric,
+  	\`price_type\` text DEFAULT 'flat',
+  	\`price\` numeric DEFAULT 0,
+  	\`_uuid\` text,
+  	\`block_name\` text,
+  	FOREIGN KEY (\`_parent_id\`) REFERENCES \`_products_v\`(\`id\`) ON UPDATE no action ON DELETE cascade
+  );
+  `);
+  await db.run(
+    sql`CREATE INDEX \`_products_v_blocks_quantity_order_idx\` ON \`_products_v_blocks_quantity\` (\`_order\`);`,
+  );
+  await db.run(
+    sql`CREATE INDEX \`_products_v_blocks_quantity_parent_id_idx\` ON \`_products_v_blocks_quantity\` (\`_parent_id\`);`,
+  );
+  await db.run(
+    sql`CREATE INDEX \`_products_v_blocks_quantity_path_idx\` ON \`_products_v_blocks_quantity\` (\`_path\`);`,
+  );
+  await db.run(sql`CREATE TABLE \`_products_v_blocks_date_picker\` (
+  	\`_order\` integer NOT NULL,
+  	\`_parent_id\` integer NOT NULL,
+  	\`_path\` text NOT NULL,
+  	\`id\` integer PRIMARY KEY NOT NULL,
+  	\`label\` text,
+  	\`description\` text,
+  	\`required\` integer DEFAULT false,
+  	\`price_type\` text DEFAULT 'flat',
+  	\`price\` numeric DEFAULT 0,
+  	\`_uuid\` text,
+  	\`block_name\` text,
+  	FOREIGN KEY (\`_parent_id\`) REFERENCES \`_products_v\`(\`id\`) ON UPDATE no action ON DELETE cascade
+  );
+  `);
+  await db.run(
+    sql`CREATE INDEX \`_products_v_blocks_date_picker_order_idx\` ON \`_products_v_blocks_date_picker\` (\`_order\`);`,
+  );
+  await db.run(
+    sql`CREATE INDEX \`_products_v_blocks_date_picker_parent_id_idx\` ON \`_products_v_blocks_date_picker\` (\`_parent_id\`);`,
+  );
+  await db.run(
+    sql`CREATE INDEX \`_products_v_blocks_date_picker_path_idx\` ON \`_products_v_blocks_date_picker\` (\`_path\`);`,
+  );
+  await db.run(sql`CREATE TABLE \`carts_items_addon_selections\` (
+  	\`_order\` integer NOT NULL,
+  	\`_parent_id\` text NOT NULL,
+  	\`id\` text PRIMARY KEY NOT NULL,
+  	\`field_id\` text NOT NULL,
+  	\`label\` text NOT NULL,
+  	\`value\` text NOT NULL,
+  	\`price_adjustment\` numeric DEFAULT 0,
+  	\`price_adjustment_n_g_n\` numeric DEFAULT 0,
+  	FOREIGN KEY (\`_parent_id\`) REFERENCES \`carts_items\`(\`id\`) ON UPDATE no action ON DELETE cascade
+  );
+  `);
+  await db.run(
+    sql`CREATE INDEX \`carts_items_addon_selections_order_idx\` ON \`carts_items_addon_selections\` (\`_order\`);`,
+  );
+  await db.run(
+    sql`CREATE INDEX \`carts_items_addon_selections_parent_id_idx\` ON \`carts_items_addon_selections\` (\`_parent_id\`);`,
+  );
+  await db.run(sql`ALTER TABLE \`products\` ADD \`is_subscription\` integer DEFAULT false;`);
+  await db.run(sql`ALTER TABLE \`products\` ADD \`exclude_global_addons\` integer DEFAULT false;`);
+  await db.run(sql`ALTER TABLE \`products\` ADD \`subscription_price\` numeric;`);
+  await db.run(sql`ALTER TABLE \`products\` ADD \`subscription_price_n_g_n\` numeric;`);
+  await db.run(sql`ALTER TABLE \`products\` ADD \`period\` text DEFAULT 'month';`);
+  await db.run(sql`ALTER TABLE \`products\` ADD \`interval\` numeric DEFAULT 1;`);
+  await db.run(sql`ALTER TABLE \`products\` ADD \`trial_days\` numeric DEFAULT 0;`);
+  await db.run(sql`ALTER TABLE \`products\` ADD \`expiry_length\` numeric DEFAULT 0;`);
+  await db.run(sql`ALTER TABLE \`products\` ADD \`sign_up_fee\` numeric DEFAULT 0;`);
+  await db.run(sql`ALTER TABLE \`products\` ADD \`sign_up_fee_n_g_n\` numeric DEFAULT 0;`);
+  await db.run(
+    sql`ALTER TABLE \`_products_v\` ADD \`version_is_subscription\` integer DEFAULT false;`,
+  );
+  await db.run(
+    sql`ALTER TABLE \`_products_v\` ADD \`version_exclude_global_addons\` integer DEFAULT false;`,
+  );
+  await db.run(sql`ALTER TABLE \`_products_v\` ADD \`version_subscription_price\` numeric;`);
+  await db.run(sql`ALTER TABLE \`_products_v\` ADD \`version_subscription_price_n_g_n\` numeric;`);
+  await db.run(sql`ALTER TABLE \`_products_v\` ADD \`version_period\` text DEFAULT 'month';`);
+  await db.run(sql`ALTER TABLE \`_products_v\` ADD \`version_interval\` numeric DEFAULT 1;`);
+  await db.run(sql`ALTER TABLE \`_products_v\` ADD \`version_trial_days\` numeric DEFAULT 0;`);
+  await db.run(sql`ALTER TABLE \`_products_v\` ADD \`version_expiry_length\` numeric DEFAULT 0;`);
+  await db.run(sql`ALTER TABLE \`_products_v\` ADD \`version_sign_up_fee\` numeric DEFAULT 0;`);
+  await db.run(
+    sql`ALTER TABLE \`_products_v\` ADD \`version_sign_up_fee_n_g_n\` numeric DEFAULT 0;`,
+  );
+  await db.run(
+    sql`ALTER TABLE \`payload_locked_documents_rels\` ADD \`subscriptions_id\` integer REFERENCES subscriptions(id);`,
+  );
+  await db.run(
+    sql`CREATE INDEX \`payload_locked_documents_rels_subscriptions_id_idx\` ON \`payload_locked_documents_rels\` (\`subscriptions_id\`);`,
+  );
+}
+
+export async function down({ db, payload, req }: MigrateDownArgs): Promise<void> {
+  await db.run(sql`DROP TABLE \`subscriptions\`;`);
+  await db.run(sql`DROP TABLE \`subscriptions_rels\`;`);
+  await db.run(sql`DROP TABLE \`products_blocks_multiple_choice_options\`;`);
+  await db.run(sql`DROP TABLE \`products_blocks_multiple_choice\`;`);
+  await db.run(sql`DROP TABLE \`products_blocks_checkboxes_options\`;`);
+  await db.run(sql`DROP TABLE \`products_blocks_checkboxes\`;`);
+  await db.run(sql`DROP TABLE \`products_blocks_short_text\`;`);
+  await db.run(sql`DROP TABLE \`products_blocks_long_text\`;`);
+  await db.run(sql`DROP TABLE \`products_blocks_file_upload\`;`);
+  await db.run(sql`DROP TABLE \`products_blocks_customer_price\`;`);
+  await db.run(sql`DROP TABLE \`products_blocks_quantity\`;`);
+  await db.run(sql`DROP TABLE \`products_blocks_date_picker\`;`);
+  await db.run(sql`DROP TABLE \`_products_v_blocks_multiple_choice_options\`;`);
+  await db.run(sql`DROP TABLE \`_products_v_blocks_multiple_choice\`;`);
+  await db.run(sql`DROP TABLE \`_products_v_blocks_checkboxes_options\`;`);
+  await db.run(sql`DROP TABLE \`_products_v_blocks_checkboxes\`;`);
+  await db.run(sql`DROP TABLE \`_products_v_blocks_short_text\`;`);
+  await db.run(sql`DROP TABLE \`_products_v_blocks_long_text\`;`);
+  await db.run(sql`DROP TABLE \`_products_v_blocks_file_upload\`;`);
+  await db.run(sql`DROP TABLE \`_products_v_blocks_customer_price\`;`);
+  await db.run(sql`DROP TABLE \`_products_v_blocks_quantity\`;`);
+  await db.run(sql`DROP TABLE \`_products_v_blocks_date_picker\`;`);
+  await db.run(sql`DROP TABLE \`carts_items_addon_selections\`;`);
+  await db.run(sql`PRAGMA foreign_keys=OFF;`);
+  await db.run(sql`CREATE TABLE \`__new_payload_locked_documents_rels\` (
+  	\`id\` integer PRIMARY KEY NOT NULL,
+  	\`order\` integer,
+  	\`parent_id\` integer NOT NULL,
+  	\`path\` text NOT NULL,
+  	\`users_id\` integer,
+  	\`pages_id\` integer,
+  	\`posts_id\` integer,
+  	\`categories_id\` integer,
+  	\`media_id\` integer,
+  	\`product_addons_id\` integer,
+  	\`redirects_id\` integer,
+  	\`forms_id\` integer,
+  	\`form_submissions_id\` integer,
+  	\`search_id\` integer,
+  	\`addresses_id\` integer,
+  	\`variants_id\` integer,
+  	\`variant_types_id\` integer,
+  	\`variant_options_id\` integer,
+  	\`products_id\` integer,
+  	\`carts_id\` integer,
+  	\`orders_id\` integer,
+  	\`transactions_id\` integer,
+  	\`marketing_email_events_id\` integer,
+  	\`crm_contacts_id\` integer,
+  	\`crm_activities_id\` integer,
+  	\`crm_webhook_events_id\` integer,
+  	\`crm_companies_id\` integer,
+  	\`crm_deals_id\` integer,
+  	\`crm_quotes_id\` integer,
+  	\`crm_invoices_id\` integer,
+  	\`crm_notes_id\` integer,
+  	\`crm_segments_id\` integer,
+  	\`crm_tickets_id\` integer,
+  	\`payload_folders_id\` integer,
+  	FOREIGN KEY (\`parent_id\`) REFERENCES \`payload_locked_documents\`(\`id\`) ON UPDATE no action ON DELETE cascade,
+  	FOREIGN KEY (\`users_id\`) REFERENCES \`users\`(\`id\`) ON UPDATE no action ON DELETE cascade,
+  	FOREIGN KEY (\`pages_id\`) REFERENCES \`pages\`(\`id\`) ON UPDATE no action ON DELETE cascade,
+  	FOREIGN KEY (\`posts_id\`) REFERENCES \`posts\`(\`id\`) ON UPDATE no action ON DELETE cascade,
+  	FOREIGN KEY (\`categories_id\`) REFERENCES \`categories\`(\`id\`) ON UPDATE no action ON DELETE cascade,
+  	FOREIGN KEY (\`media_id\`) REFERENCES \`media\`(\`id\`) ON UPDATE no action ON DELETE cascade,
+  	FOREIGN KEY (\`product_addons_id\`) REFERENCES \`product_addons\`(\`id\`) ON UPDATE no action ON DELETE cascade,
+  	FOREIGN KEY (\`redirects_id\`) REFERENCES \`redirects\`(\`id\`) ON UPDATE no action ON DELETE cascade,
+  	FOREIGN KEY (\`forms_id\`) REFERENCES \`forms\`(\`id\`) ON UPDATE no action ON DELETE cascade,
+  	FOREIGN KEY (\`form_submissions_id\`) REFERENCES \`form_submissions\`(\`id\`) ON UPDATE no action ON DELETE cascade,
+  	FOREIGN KEY (\`search_id\`) REFERENCES \`search\`(\`id\`) ON UPDATE no action ON DELETE cascade,
+  	FOREIGN KEY (\`addresses_id\`) REFERENCES \`addresses\`(\`id\`) ON UPDATE no action ON DELETE cascade,
+  	FOREIGN KEY (\`variants_id\`) REFERENCES \`variants\`(\`id\`) ON UPDATE no action ON DELETE cascade,
+  	FOREIGN KEY (\`variant_types_id\`) REFERENCES \`variant_types\`(\`id\`) ON UPDATE no action ON DELETE cascade,
+  	FOREIGN KEY (\`variant_options_id\`) REFERENCES \`variant_options\`(\`id\`) ON UPDATE no action ON DELETE cascade,
+  	FOREIGN KEY (\`products_id\`) REFERENCES \`products\`(\`id\`) ON UPDATE no action ON DELETE cascade,
+  	FOREIGN KEY (\`carts_id\`) REFERENCES \`carts\`(\`id\`) ON UPDATE no action ON DELETE cascade,
+  	FOREIGN KEY (\`orders_id\`) REFERENCES \`orders\`(\`id\`) ON UPDATE no action ON DELETE cascade,
+  	FOREIGN KEY (\`transactions_id\`) REFERENCES \`transactions\`(\`id\`) ON UPDATE no action ON DELETE cascade,
+  	FOREIGN KEY (\`marketing_email_events_id\`) REFERENCES \`marketing_email_events\`(\`id\`) ON UPDATE no action ON DELETE cascade,
+  	FOREIGN KEY (\`crm_contacts_id\`) REFERENCES \`crm_contacts\`(\`id\`) ON UPDATE no action ON DELETE cascade,
+  	FOREIGN KEY (\`crm_activities_id\`) REFERENCES \`crm_activities\`(\`id\`) ON UPDATE no action ON DELETE cascade,
+  	FOREIGN KEY (\`crm_webhook_events_id\`) REFERENCES \`crm_webhook_events\`(\`id\`) ON UPDATE no action ON DELETE cascade,
+  	FOREIGN KEY (\`crm_companies_id\`) REFERENCES \`crm_companies\`(\`id\`) ON UPDATE no action ON DELETE cascade,
+  	FOREIGN KEY (\`crm_deals_id\`) REFERENCES \`crm_deals\`(\`id\`) ON UPDATE no action ON DELETE cascade,
+  	FOREIGN KEY (\`crm_quotes_id\`) REFERENCES \`crm_quotes\`(\`id\`) ON UPDATE no action ON DELETE cascade,
+  	FOREIGN KEY (\`crm_invoices_id\`) REFERENCES \`crm_invoices\`(\`id\`) ON UPDATE no action ON DELETE cascade,
+  	FOREIGN KEY (\`crm_notes_id\`) REFERENCES \`crm_notes\`(\`id\`) ON UPDATE no action ON DELETE cascade,
+  	FOREIGN KEY (\`crm_segments_id\`) REFERENCES \`crm_segments\`(\`id\`) ON UPDATE no action ON DELETE cascade,
+  	FOREIGN KEY (\`crm_tickets_id\`) REFERENCES \`crm_tickets\`(\`id\`) ON UPDATE no action ON DELETE cascade,
+  	FOREIGN KEY (\`payload_folders_id\`) REFERENCES \`payload_folders\`(\`id\`) ON UPDATE no action ON DELETE cascade
+  );
+  `);
+  await db.run(
+    sql`INSERT INTO \`__new_payload_locked_documents_rels\`("id", "order", "parent_id", "path", "users_id", "pages_id", "posts_id", "categories_id", "media_id", "product_addons_id", "redirects_id", "forms_id", "form_submissions_id", "search_id", "addresses_id", "variants_id", "variant_types_id", "variant_options_id", "products_id", "carts_id", "orders_id", "transactions_id", "marketing_email_events_id", "crm_contacts_id", "crm_activities_id", "crm_webhook_events_id", "crm_companies_id", "crm_deals_id", "crm_quotes_id", "crm_invoices_id", "crm_notes_id", "crm_segments_id", "crm_tickets_id", "payload_folders_id") SELECT "id", "order", "parent_id", "path", "users_id", "pages_id", "posts_id", "categories_id", "media_id", "product_addons_id", "redirects_id", "forms_id", "form_submissions_id", "search_id", "addresses_id", "variants_id", "variant_types_id", "variant_options_id", "products_id", "carts_id", "orders_id", "transactions_id", "marketing_email_events_id", "crm_contacts_id", "crm_activities_id", "crm_webhook_events_id", "crm_companies_id", "crm_deals_id", "crm_quotes_id", "crm_invoices_id", "crm_notes_id", "crm_segments_id", "crm_tickets_id", "payload_folders_id" FROM \`payload_locked_documents_rels\`;`,
+  );
+  await db.run(sql`DROP TABLE \`payload_locked_documents_rels\`;`);
+  await db.run(
+    sql`ALTER TABLE \`__new_payload_locked_documents_rels\` RENAME TO \`payload_locked_documents_rels\`;`,
+  );
+  await db.run(sql`PRAGMA foreign_keys=ON;`);
+  await db.run(
+    sql`CREATE INDEX \`payload_locked_documents_rels_order_idx\` ON \`payload_locked_documents_rels\` (\`order\`);`,
+  );
+  await db.run(
+    sql`CREATE INDEX \`payload_locked_documents_rels_parent_idx\` ON \`payload_locked_documents_rels\` (\`parent_id\`);`,
+  );
+  await db.run(
+    sql`CREATE INDEX \`payload_locked_documents_rels_path_idx\` ON \`payload_locked_documents_rels\` (\`path\`);`,
+  );
+  await db.run(
+    sql`CREATE INDEX \`payload_locked_documents_rels_users_id_idx\` ON \`payload_locked_documents_rels\` (\`users_id\`);`,
+  );
+  await db.run(
+    sql`CREATE INDEX \`payload_locked_documents_rels_pages_id_idx\` ON \`payload_locked_documents_rels\` (\`pages_id\`);`,
+  );
+  await db.run(
+    sql`CREATE INDEX \`payload_locked_documents_rels_posts_id_idx\` ON \`payload_locked_documents_rels\` (\`posts_id\`);`,
+  );
+  await db.run(
+    sql`CREATE INDEX \`payload_locked_documents_rels_categories_id_idx\` ON \`payload_locked_documents_rels\` (\`categories_id\`);`,
+  );
+  await db.run(
+    sql`CREATE INDEX \`payload_locked_documents_rels_media_id_idx\` ON \`payload_locked_documents_rels\` (\`media_id\`);`,
+  );
+  await db.run(
+    sql`CREATE INDEX \`payload_locked_documents_rels_product_addons_id_idx\` ON \`payload_locked_documents_rels\` (\`product_addons_id\`);`,
+  );
+  await db.run(
+    sql`CREATE INDEX \`payload_locked_documents_rels_redirects_id_idx\` ON \`payload_locked_documents_rels\` (\`redirects_id\`);`,
+  );
+  await db.run(
+    sql`CREATE INDEX \`payload_locked_documents_rels_forms_id_idx\` ON \`payload_locked_documents_rels\` (\`forms_id\`);`,
+  );
+  await db.run(
+    sql`CREATE INDEX \`payload_locked_documents_rels_form_submissions_id_idx\` ON \`payload_locked_documents_rels\` (\`form_submissions_id\`);`,
+  );
+  await db.run(
+    sql`CREATE INDEX \`payload_locked_documents_rels_search_id_idx\` ON \`payload_locked_documents_rels\` (\`search_id\`);`,
+  );
+  await db.run(
+    sql`CREATE INDEX \`payload_locked_documents_rels_addresses_id_idx\` ON \`payload_locked_documents_rels\` (\`addresses_id\`);`,
+  );
+  await db.run(
+    sql`CREATE INDEX \`payload_locked_documents_rels_variants_id_idx\` ON \`payload_locked_documents_rels\` (\`variants_id\`);`,
+  );
+  await db.run(
+    sql`CREATE INDEX \`payload_locked_documents_rels_variant_types_id_idx\` ON \`payload_locked_documents_rels\` (\`variant_types_id\`);`,
+  );
+  await db.run(
+    sql`CREATE INDEX \`payload_locked_documents_rels_variant_options_id_idx\` ON \`payload_locked_documents_rels\` (\`variant_options_id\`);`,
+  );
+  await db.run(
+    sql`CREATE INDEX \`payload_locked_documents_rels_products_id_idx\` ON \`payload_locked_documents_rels\` (\`products_id\`);`,
+  );
+  await db.run(
+    sql`CREATE INDEX \`payload_locked_documents_rels_carts_id_idx\` ON \`payload_locked_documents_rels\` (\`carts_id\`);`,
+  );
+  await db.run(
+    sql`CREATE INDEX \`payload_locked_documents_rels_orders_id_idx\` ON \`payload_locked_documents_rels\` (\`orders_id\`);`,
+  );
+  await db.run(
+    sql`CREATE INDEX \`payload_locked_documents_rels_transactions_id_idx\` ON \`payload_locked_documents_rels\` (\`transactions_id\`);`,
+  );
+  await db.run(
+    sql`CREATE INDEX \`payload_locked_documents_rels_marketing_email_events_id_idx\` ON \`payload_locked_documents_rels\` (\`marketing_email_events_id\`);`,
+  );
+  await db.run(
+    sql`CREATE INDEX \`payload_locked_documents_rels_crm_contacts_id_idx\` ON \`payload_locked_documents_rels\` (\`crm_contacts_id\`);`,
+  );
+  await db.run(
+    sql`CREATE INDEX \`payload_locked_documents_rels_crm_activities_id_idx\` ON \`payload_locked_documents_rels\` (\`crm_activities_id\`);`,
+  );
+  await db.run(
+    sql`CREATE INDEX \`payload_locked_documents_rels_crm_webhook_events_id_idx\` ON \`payload_locked_documents_rels\` (\`crm_webhook_events_id\`);`,
+  );
+  await db.run(
+    sql`CREATE INDEX \`payload_locked_documents_rels_crm_companies_id_idx\` ON \`payload_locked_documents_rels\` (\`crm_companies_id\`);`,
+  );
+  await db.run(
+    sql`CREATE INDEX \`payload_locked_documents_rels_crm_deals_id_idx\` ON \`payload_locked_documents_rels\` (\`crm_deals_id\`);`,
+  );
+  await db.run(
+    sql`CREATE INDEX \`payload_locked_documents_rels_crm_quotes_id_idx\` ON \`payload_locked_documents_rels\` (\`crm_quotes_id\`);`,
+  );
+  await db.run(
+    sql`CREATE INDEX \`payload_locked_documents_rels_crm_invoices_id_idx\` ON \`payload_locked_documents_rels\` (\`crm_invoices_id\`);`,
+  );
+  await db.run(
+    sql`CREATE INDEX \`payload_locked_documents_rels_crm_notes_id_idx\` ON \`payload_locked_documents_rels\` (\`crm_notes_id\`);`,
+  );
+  await db.run(
+    sql`CREATE INDEX \`payload_locked_documents_rels_crm_segments_id_idx\` ON \`payload_locked_documents_rels\` (\`crm_segments_id\`);`,
+  );
+  await db.run(
+    sql`CREATE INDEX \`payload_locked_documents_rels_crm_tickets_id_idx\` ON \`payload_locked_documents_rels\` (\`crm_tickets_id\`);`,
+  );
+  await db.run(
+    sql`CREATE INDEX \`payload_locked_documents_rels_payload_folders_id_idx\` ON \`payload_locked_documents_rels\` (\`payload_folders_id\`);`,
+  );
+  await db.run(sql`ALTER TABLE \`products\` DROP COLUMN \`is_subscription\`;`);
+  await db.run(sql`ALTER TABLE \`products\` DROP COLUMN \`exclude_global_addons\`;`);
+  await db.run(sql`ALTER TABLE \`products\` DROP COLUMN \`subscription_price\`;`);
+  await db.run(sql`ALTER TABLE \`products\` DROP COLUMN \`subscription_price_n_g_n\`;`);
+  await db.run(sql`ALTER TABLE \`products\` DROP COLUMN \`period\`;`);
+  await db.run(sql`ALTER TABLE \`products\` DROP COLUMN \`interval\`;`);
+  await db.run(sql`ALTER TABLE \`products\` DROP COLUMN \`trial_days\`;`);
+  await db.run(sql`ALTER TABLE \`products\` DROP COLUMN \`expiry_length\`;`);
+  await db.run(sql`ALTER TABLE \`products\` DROP COLUMN \`sign_up_fee\`;`);
+  await db.run(sql`ALTER TABLE \`products\` DROP COLUMN \`sign_up_fee_n_g_n\`;`);
+  await db.run(sql`ALTER TABLE \`_products_v\` DROP COLUMN \`version_is_subscription\`;`);
+  await db.run(sql`ALTER TABLE \`_products_v\` DROP COLUMN \`version_exclude_global_addons\`;`);
+  await db.run(sql`ALTER TABLE \`_products_v\` DROP COLUMN \`version_subscription_price\`;`);
+  await db.run(sql`ALTER TABLE \`_products_v\` DROP COLUMN \`version_subscription_price_n_g_n\`;`);
+  await db.run(sql`ALTER TABLE \`_products_v\` DROP COLUMN \`version_period\`;`);
+  await db.run(sql`ALTER TABLE \`_products_v\` DROP COLUMN \`version_interval\`;`);
+  await db.run(sql`ALTER TABLE \`_products_v\` DROP COLUMN \`version_trial_days\`;`);
+  await db.run(sql`ALTER TABLE \`_products_v\` DROP COLUMN \`version_expiry_length\`;`);
+  await db.run(sql`ALTER TABLE \`_products_v\` DROP COLUMN \`version_sign_up_fee\`;`);
+  await db.run(sql`ALTER TABLE \`_products_v\` DROP COLUMN \`version_sign_up_fee_n_g_n\`;`);
+}

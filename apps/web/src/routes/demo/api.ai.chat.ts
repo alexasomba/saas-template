@@ -39,7 +39,9 @@ export const Route = createFileRoute("/demo/api/ai/chat")({
         const abortController = new AbortController();
 
         try {
-          const body = await request.json();
+          const body = (await request.json()) as {
+            messages: any[];
+          };
           const { messages } = body;
 
           // Determine the best available provider

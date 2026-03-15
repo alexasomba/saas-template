@@ -6,7 +6,7 @@ export const Route = createFileRoute("/demo/api/ai/tts")({
   server: {
     handlers: {
       POST: async ({ request }) => {
-        const body = await request.json();
+        const body = (await request.json()) as any;
         const { text, voice = "alloy", model = "tts-1", format = "mp3", speed = 1.0 } = body;
 
         if (!text || text.trim().length === 0) {

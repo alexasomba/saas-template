@@ -63,6 +63,7 @@
     "@tanstack/store": "latest",
     "@workspace/api": "workspace:*",
     "@workspace/auth": "workspace:*",
+    "@workspace/db": "workspace:*",
     "@workspace/env": "workspace:*",
     "@workspace/ui": "workspace:*",
     "ai": "catalog:",

@@ -2,7 +2,8 @@ import { devToolsMiddleware } from "@ai-sdk/devtools";
 import { createGoogleGenerativeAI } from "@ai-sdk/google";
 import { createContext } from "@workspace/api/context";
 import { appRouter } from "@workspace/api/routers/index";
-import { auth } from "@workspace/auth";
+import { auth, setAuth } from "@workspace/auth";
+import { db } from "@workspace/db";
 import { env } from "@workspace/env/server";
 import { OpenAPIHandler } from "@orpc/openapi/fetch";
 import { OpenAPIReferencePlugin } from "@orpc/openapi/plugins";
@@ -13,6 +14,8 @@ import { streamText, convertToModelMessages, wrapLanguageModel } from "ai";
 import { Hono } from "hono";
 import { cors } from "hono/cors";
 import { logger } from "hono/logger";
+
+setAuth({ db });
 
 const app = new Hono();
 

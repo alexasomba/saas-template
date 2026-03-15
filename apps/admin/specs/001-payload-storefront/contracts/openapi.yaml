@@ -1,0 +1,438 @@
+openapi: 3.1.0
+info:
+  title: Cloudflare Payload Storefront API Contracts
+  version: 0.1.0
+  description: REST interface powering storefront product discovery, cart management, checkout, and optional account creation.
+servers:
+  - url: https://{domain}
+    variables:
+      domain:
+        default: localhost:8787
+        description: Deployment domain or preview URL.
+paths:
+  /api/products:
+    get:
+      summary: List published products with filters.
+      parameters:
+        - in: query
+          name: category
+          schema:
+            type: string
+          description: Filter by category slug.
+        - in: query
+          name: search
+          schema:
+            type: string
+          description: Text search across titles and descriptions.
+        - in: query
+          name: limit
+          schema:
+            type: integer
+            default: 12
+            minimum: 1
+            maximum: 60
+          description: Page size for infinite scrolling.
+        - in: query
+          name: cursor
+          schema:
+            type: string
+          description: Cursor token for pagination.
+      responses:
+        "200":
+          description: Product collection.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/ProductSummary"
+                  nextCursor:
+                    type: string
+                    nullable: true
+        "400":
+          description: Invalid filter payload.
+  /api/products/{slug}:
+    get:
+      summary: Retrieve a single published product by slug.
+      parameters:
+        - in: path
+          name: slug
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Product details.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProductDetail"
+        "404":
+          description: Product not found or unpublished.
+  /api/posts:
+    get:
+      summary: List published blog posts with optional category filter.
+      parameters:
+        - in: query
+          name: category
+          schema:
+            type: string
+        - in: query
+          name: search
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Collection of posts for the blog index.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/PostSummary"
+  /api/cart/items:
+    post:
+      summary: Add an item to the active cart.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [productId, quantity]
+              properties:
+                productId:
+                  type: string
+                variantId:
+                  type: string
+                  nullable: true
+                quantity:
+                  type: integer
+                  minimum: 1
+      responses:
+        "200":
+          description: Updated cart state.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Cart"
+        "409":
+          description: Requested variant lacks sufficient inventory.
+    get:
+      summary: Retrieve the active cart for the current session.
+      responses:
+        "200":
+          description: Current cart contents (creates empty cart when none exists).
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Cart"
+  /api/cart/items/{itemId}:
+    patch:
+      summary: Update quantity for an existing line item.
+      parameters:
+        - in: path
+          name: itemId
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [quantity]
+              properties:
+                quantity:
+                  type: integer
+                  minimum: 0
+      responses:
+        "200":
+          description: Updated cart state.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Cart"
+        "404":
+          description: Line item not present.
+    delete:
+      summary: Remove a cart line item.
+      parameters:
+        - in: path
+          name: itemId
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Cart after removal.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Cart"
+  /api/checkout:
+    post:
+      summary: Complete guest checkout and create order.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - contact
+                - shippingAddress
+                - paymentIntentId
+              properties:
+                contact:
+                  $ref: "#/components/schemas/ContactInfo"
+                shippingAddress:
+                  $ref: "#/components/schemas/Address"
+                paymentIntentId:
+                  type: string
+                marketingOptIn:
+                  type: boolean
+                  default: false
+      responses:
+        "200":
+          description: Order confirmation payload.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  order:
+                    $ref: "#/components/schemas/Order"
+                  accountInviteToken:
+                    type: string
+                    nullable: true
+        "400":
+          description: Invalid checkout payload.
+        "402":
+          description: Payment authorization failed.
+  /api/checkout/account:
+    post:
+      summary: Convert a guest order into a registered customer after checkout.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - accountInviteToken
+                - password
+              properties:
+                accountInviteToken:
+                  type: string
+                password:
+                  type: string
+                marketingOptIn:
+                  type: boolean
+      responses:
+        "200":
+          description: Customer account created and linked to order history.
+        "400":
+          description: Token invalid or password policy violation.
+components:
+  schemas:
+    ProductSummary:
+      type: object
+      properties:
+        id:
+          type: string
+        title:
+          type: string
+        slug:
+          type: string
+        priceInUSD:
+          type: integer
+        enableVariants:
+          type: boolean
+        gallery:
+          type: array
+          items:
+            $ref: "#/components/schemas/GalleryImage"
+    ProductDetail:
+      allOf:
+        - $ref: "#/components/schemas/ProductSummary"
+        - type: object
+          properties:
+            description:
+              type: string
+            meta:
+              $ref: "#/components/schemas/MetaFields"
+            variants:
+              type: array
+              items:
+                $ref: "#/components/schemas/Variant"
+            layout:
+              type: array
+              items:
+                type: object
+    GalleryImage:
+      type: object
+      properties:
+        url:
+          type: string
+        alt:
+          type: string
+        variantOption:
+          type: string
+          nullable: true
+    Variant:
+      type: object
+      properties:
+        id:
+          type: string
+        inventory:
+          type: integer
+        priceInUSD:
+          type: integer
+          nullable: true
+        options:
+          type: array
+          items:
+            type: object
+            properties:
+              label:
+                type: string
+              value:
+                type: string
+    PostSummary:
+      type: object
+      properties:
+        id:
+          type: string
+        title:
+          type: string
+        slug:
+          type: string
+        heroImage:
+          type: string
+        categories:
+          type: array
+          items:
+            type: string
+        publishedAt:
+          type: string
+          format: date-time
+    Cart:
+      type: object
+      properties:
+        id:
+          type: string
+        currency:
+          type: string
+        items:
+          type: array
+          items:
+            $ref: "#/components/schemas/CartItem"
+        subtotal:
+          type: integer
+        promotionsApplied:
+          type: array
+          items:
+            type: string
+        purchasedAt:
+          type: string
+          format: date-time
+          nullable: true
+    CartItem:
+      type: object
+      properties:
+        id:
+          type: string
+        productId:
+          type: string
+        variantId:
+          type: string
+          nullable: true
+        quantity:
+          type: integer
+        unitPrice:
+          type: integer
+        title:
+          type: string
+        variantSummary:
+          type: string
+          nullable: true
+    ContactInfo:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+        firstName:
+          type: string
+        lastName:
+          type: string
+        phone:
+          type: string
+          nullable: true
+    Address:
+      type: object
+      properties:
+        firstName:
+          type: string
+        lastName:
+          type: string
+        addressLine1:
+          type: string
+        addressLine2:
+          type: string
+          nullable: true
+        city:
+          type: string
+        state:
+          type: string
+        postalCode:
+          type: string
+        country:
+          type: string
+        phone:
+          type: string
+          nullable: true
+    Order:
+      type: object
+      properties:
+        id:
+          type: string
+        status:
+          type: string
+          enum: [processing, completed, cancelled]
+        amount:
+          type: integer
+        currency:
+          type: string
+        items:
+          type: array
+          items:
+            $ref: "#/components/schemas/CartItem"
+        customerEmail:
+          type: string
+        shippingAddress:
+          $ref: "#/components/schemas/Address"
+        payment:
+          type: object
+          properties:
+            paymentIntentId:
+              type: string
+            status:
+              type: string
+    MetaFields:
+      type: object
+      properties:
+        title:
+          type: string
+        description:
+          type: string
+        imageUrl:
+          type: string

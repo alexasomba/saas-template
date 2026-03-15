@@ -28,7 +28,7 @@ export const Route = createFileRoute("/demo/api/mcp-todos")({
         });
       },
       POST: async ({ request }) => {
-        const { title } = await request.json();
+        const { title } = (await request.json()) as any;
         addTodo(title);
         return Response.json(getTodos());
       },
